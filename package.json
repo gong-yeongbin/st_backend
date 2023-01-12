@@ -1,7 +1,7 @@
 {
-  "name": "telegram-node-bot_stork",
+  "name": "my_template",
   "version": "1.0.0",
-  "description": "stork bot",
+  "description": "template",
   "main": "index.js",
   "scripts": {
     "start": "npm run build:live",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gong-yeongbin/telegram-node-bot.git"
+    "url": "git+https://github.com/gong-yeongbin/my_template.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/gong-yeongbin/telegram-node-bot/issues"
+    "url": "https://github.com/gong-yeongbin/my_template/issues"
   },
-  "homepage": "https://github.com/gong-yeongbin/telegram-node-bot#readme",
+  "homepage": "https://github.com/gong-yeongbin/my_template#readme",
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
