@@ -1,6 +1,6 @@
 - - -
 #### TYPESCRIPT
-* install
+* install   
 npm install typescript --save-dev 타입스크립트.  
 npm install @types/node --save-dev node.d.ts.  
 npx tsc --init 타입스크립트 옵션 tsconfig.json.  
