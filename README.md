@@ -8,3 +8,10 @@ npm install ts-node --save-dev 타입스크립트 코드가 컴파일 되기를 
 npm install nodemon --save-dev nodemon 파일에 수정/추가와 같은 변화가 생기면 자동으로 재시작.  
 npm install --save-dev rimraf 예전에 생성된 build 폴더 삭제.  
 - - -
+- - -
+#### ESLINT
+* install   
+npm install -D eslint.  
+npx eslint --init .eslint.json 파일 생성 및 설정
+
+- - -
