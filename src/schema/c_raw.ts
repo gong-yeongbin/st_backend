@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const c_rawSchema = new mongoose.Schema(
   {
     c_time: Date, //  체결시간
-    code: Number, //  코드
+    code: String, //  코드
     c_price: Number, //  체결가
     c_prev_com: Number, //  전일대비
     c_updown_rate: Number, //  등락율
@@ -30,6 +30,6 @@ const c_rawSchema = new mongoose.Schema(
   }
 );
 
-c_rawSchema.index({ c_time: 1, code: 1 });
+c_rawSchema.index({ code: 1, c_time: 1 });
 
 export default mongoose.model('c_raw', c_rawSchema);
