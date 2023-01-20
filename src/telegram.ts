@@ -4,7 +4,10 @@ import TelegramBot from 'node-telegram-bot-api';
 import c_raw from './schema/c_raw';
 
 async function checkedMoreThanFiveBillion(): Promise<
-  { _id: string; theSumOfTheMinutes: number }[]
+  {
+    _id: string;
+    theSumOfTheMinutes: number;
+  }[]
 > {
   const date = new Date();
   const offset = date.getTimezoneOffset() * 60000;
@@ -36,7 +39,7 @@ async function checkedMoreThanFiveBillion(): Promise<
     },
     {
       $match: {
-        theSumOfTheMinutes: { $gte: 5000000000 },
+        theSumOfTheMinutes: { $gte: 100000000 },
       },
     },
     {
@@ -45,17 +48,28 @@ async function checkedMoreThanFiveBillion(): Promise<
   ]);
 }
 
-async function sendTelegramMessages(code: string, message: string) {
+async function sendTelegramMessages(messages: string) {
   const token: string = process.env.TELEGRAM_TOKEN!;
   const chat_id: string = process.env.TELEGRAM_CHATID!;
-  const bot: TelegramBot = new TelegramBot(token, { polling: true });
+  const bot: TelegramBot = new TelegramBot(token);
 
-  await bot.sendMessage(chat_id, `${code} : ${message}`);
+  await bot.sendMessage(chat_id, messages);
 }
 
-// function createingTelegramMessages(
-//   data: { _id: string; theSumOfTheMinutes: number }[]
-// ) {}
+function createingTelegramMessages(
+  data: {
+    _id: string;
+    theSumOfTheMinutes: number;
+  }[]
+): string {
+  const arrayMessage: string[] = data.map((value) => {
+    return `1억↑\n${
+      value._id
+    }\t\t:\t\t${value.theSumOfTheMinutes.toLocaleString('ko-KR')} \n`;
+  });
+
+  return arrayMessage.join('');
+}
 
 export default function main() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
@@ -67,6 +81,8 @@ export default function main() {
 
     if (!checkedMoreThanFiveBillionData.length) return;
 
-    // createingTelegramMessages(checkedMoreThanFiveBillionData);
+    void sendTelegramMessages(
+      createingTelegramMessages(checkedMoreThanFiveBillionData)
+    );
   });
 }
