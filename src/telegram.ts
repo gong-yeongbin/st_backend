@@ -39,7 +39,7 @@ async function checkedMoreThanFiveBillion(): Promise<
     },
     {
       $match: {
-        theSumOfTheMinutes: { $gte: 100000000 },
+        theSumOfTheMinutes: { $gte: 5000000000 },
       },
     },
     {
@@ -53,7 +53,7 @@ async function sendTelegramMessages(messages: string) {
   const chat_id: string = process.env.TELEGRAM_CHATID!;
   const bot: TelegramBot = new TelegramBot(token);
 
-  await bot.sendMessage(chat_id, messages);
+  await bot.sendMessage(chat_id, `50억↑\n${messages}`);
 }
 
 function createingTelegramMessages(
@@ -63,9 +63,9 @@ function createingTelegramMessages(
   }[]
 ): string {
   const arrayMessage: string[] = data.map((value) => {
-    return `1억↑\n${
-      value._id
-    }\t\t:\t\t${value.theSumOfTheMinutes.toLocaleString('ko-KR')} \n`;
+    return `${value._id}\t\t:\t\t${value.theSumOfTheMinutes.toLocaleString(
+      'ko-KR'
+    )} \n`;
   });
 
   return arrayMessage.join('');
