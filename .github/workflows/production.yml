@@ -31,7 +31,7 @@ jobs:
           ${{ secrets.PROD }}
 
       - name: Make tar file
-        run: tar -cpvzf ./$GITHUB_SHA.tgz ./dist .env package.json appspec.yml after_deploy.sh before_deploy.sh
+        run: tar -cpvzf ./$GITHUB_SHA.tgz * .env
         shell: bash
 
       - name: Configure AWS credentials
