@@ -9,7 +9,7 @@ async function checkedMoreThanFiveBillion(): Promise<
     theSumOfTheMinutes: number;
   }[]
 > {
-  const date = new Date();
+  const date = new Date('2023-01-25 13:00:00');
   const offset = date.getTimezoneOffset() * 60000;
   const dateOffset = new Date(date.getTime() - offset);
   const startMinute = moment(dateOffset)
@@ -39,7 +39,8 @@ async function checkedMoreThanFiveBillion(): Promise<
     },
     {
       $match: {
-        theSumOfTheMinutes: { $gte: 5000000000 },
+        // theSumOfTheMinutes: { $gte: 5000000000 },
+        theSumOfTheMinutes: { $gte: 5000000 },
       },
     },
     {
@@ -73,7 +74,8 @@ function createingTelegramMessages(
 
 export default function main() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-  schedule.scheduleJob('0 */1 8-18 * * 1-6 ', async () => {
+  // schedule.scheduleJob('0 */1 8-18 * * 1-6 ', async () => {
+  schedule.scheduleJob('0 */1 * * * 1-6 ', async () => {
     const checkedMoreThanFiveBillionData: {
       _id: string;
       theSumOfTheMinutes: number;
