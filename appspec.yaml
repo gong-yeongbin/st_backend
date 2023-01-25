@@ -9,3 +9,10 @@ permissions:
     owner: ubuntu
     group: ubuntu
     mode: 755
+hooks:
+  BeforInstall:
+    - location: script/before_deploy.sh
+      runas: ubuntu
+  AfterInstall:
+    - location: script/after_deploy.sh
+      runas: ubuntu
