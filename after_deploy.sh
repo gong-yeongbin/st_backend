@@ -1,8 +1,6 @@
 REPOSITORY=/home/ubuntu/stork-analysis
 cd $REPOSITORY
 
-npn run build
-
+npm run build
 npm install
-
-npm run start
+pm2 start npm -- start
