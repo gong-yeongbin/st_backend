@@ -47,5 +47,5 @@ jobs:
             --region ap-northeast-2 \
             ./$GITHUB_SHA.tgz s3://deploy-archive/$PROJECT_NAME/$GITHUB_SHA.tgz
 
-      # - name: Code Deploy
-      #   run: aws deploy create-deployment --application-name bmart5-deploy --file-exists-behavior OVERWRITE --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name bmart5-deploy-group --s3-location bucket=bmart5-s3-bucket,bundleType=tgz,key=$PROJECT_NAME/$GITHUB_SHA.tgz
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name stork-analysis --file-exists-behavior OVERWRITE --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name stork-analysis-deploy-group --s3-location bucket=deploy-archive,bundleType=tgz,key=$PROJECT_NAME/$GITHUB_SHA.tgz
