@@ -52,7 +52,7 @@ async function sendTelegramMessages(messages: string) {
   const token: string = process.env.TELEGRAM_TOKEN!;
   const chat_id: string = process.env.TELEGRAM_CHATID!;
   const bot: TelegramBot = new TelegramBot(token);
-
+  console.log('before send message \n', messages);
   await bot.sendMessage(chat_id, `1억↑\n${messages}`);
 }
 
@@ -80,7 +80,7 @@ export default function main() {
     }[] = await checkedMoreThanFiveBillion();
 
     if (!checkedMoreThanFiveBillionData.length) return;
-
+    console.log(checkedMoreThanFiveBillionData.length);
     void sendTelegramMessages(
       createingTelegramMessages(checkedMoreThanFiveBillionData)
     );
