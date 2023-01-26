@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
 import schedule from 'node-schedule';
 import TelegramBot from 'node-telegram-bot-api';
-import c_raw from './schema/c_raw';
+import cRaw from './models/cRaw';
 
 async function checkedMoreThanFiveBillion(): Promise<
   {
@@ -22,7 +22,7 @@ async function checkedMoreThanFiveBillion(): Promise<
     .startOf('minute')
     .toISOString();
 
-  return await c_raw.aggregate([
+  return await cRaw.aggregate([
     {
       $match: {
         c_time: {
