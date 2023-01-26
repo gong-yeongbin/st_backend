@@ -39,7 +39,7 @@ async function checkedMoreThanFiveBillion(): Promise<
     },
     {
       $match: {
-        theSumOfTheMinutes: { $gte: 100000000 },
+        theSumOfTheMinutes: { $gte: 1000000000 },
       },
     },
     {
@@ -53,7 +53,7 @@ async function sendTelegramMessages(messages: string) {
   const chat_id: string = process.env.TELEGRAM_CHATID!;
   const bot: TelegramBot = new TelegramBot(token);
 
-  await bot.sendMessage(chat_id, `1억↑\n${messages}`);
+  await bot.sendMessage(chat_id, `10억↑\n${messages}`);
 }
 
 function createingTelegramMessages(
