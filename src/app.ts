@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import 'dotenv/config';
 import connectDB from './loaders/db';
 import telegram from './telegram';
-import config from './config';
+import config from './configs';
 import routers from './routes';
 
 const app: Express = express();
