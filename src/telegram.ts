@@ -3,6 +3,27 @@ import schedule from 'node-schedule';
 import TelegramBot from 'node-telegram-bot-api';
 import cRaw from './models/cRaw';
 
+// 스펙주 제외
+async function excludeNameSpec() {}
+
+// 전일 거래대금 1000억 이상
+async function transactionAmountOfThePreviousDayMoreThan100BillionWon() {
+  // 거래대금? 매수, 매도 금액 전체?, 체결 데이터 누적거래 대금?
+}
+
+// 전일대비 15%이상 (전일1000 -> 1500)
+async function moreThan15percentComparedToThePreviousDay() {
+  // 직전 1분 마지막 체결가
+}
+
+// 전일 순매수 100억이상 (매수 - 매도)
+async function netPurchaseOfThePreviousDayMoreThan10BillionWon() {}
+
+// 현재가 1000원 이상
+async function theCurrentPriceIsOver1000Won() {
+  // 직전 1분 마지막 체결가
+}
+
 async function checkedMoreThanFiveBillion(): Promise<
   {
     _id: string;
@@ -39,7 +60,7 @@ async function checkedMoreThanFiveBillion(): Promise<
     },
     {
       $match: {
-        theSumOfTheMinutes: { $gte: 1000000000 },
+        theSumOfTheMinutes: { $gte: 50000000 },
       },
     },
     {
@@ -53,7 +74,7 @@ async function sendTelegramMessages(messages: string) {
   const chat_id: string = process.env.TELEGRAM_CHATID!;
   const bot: TelegramBot = new TelegramBot(token);
 
-  await bot.sendMessage(chat_id, `10억↑\n${messages}`);
+  await bot.sendMessage(chat_id, `5천↑\n${messages}`);
 }
 
 function createingTelegramMessages(
@@ -73,12 +94,12 @@ function createingTelegramMessages(
 
 export default function main() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-  schedule.scheduleJob('0 */1 8-18 * * 1-6 ', async () => {
+  schedule.scheduleJob('0 */1 8-20 * * 1-6 ', async () => {
     const checkedMoreThanFiveBillionData: {
       _id: string;
       theSumOfTheMinutes: number;
     }[] = await checkedMoreThanFiveBillion();
-
+    console.log(checkedMoreThanFiveBillionData.length);
     if (!checkedMoreThanFiveBillionData.length) return;
 
     void sendTelegramMessages(

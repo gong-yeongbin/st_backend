@@ -24,7 +24,6 @@ const cRawSchema = new mongoose.Schema(
     c_trans_price: { type: Number }, //  거래비용
     c_power: { type: Number }, //  체결강도
     c_market_price: { type: Number }, //  시가총액
-    gubun: { type: Number }, // kospi, kosdaq 구분
   },
   {
     collection: 'c_raw',

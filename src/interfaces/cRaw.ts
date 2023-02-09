@@ -20,5 +20,4 @@ export interface cRaw {
   c_trans_price: number;
   c_power: number;
   c_market_price: number;
-  gubun: number;
 }
