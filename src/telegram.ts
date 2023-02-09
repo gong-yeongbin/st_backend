@@ -2,9 +2,11 @@ import moment from 'moment-timezone';
 import schedule from 'node-schedule';
 import TelegramBot from 'node-telegram-bot-api';
 import cRaw from './models/cRaw';
+import { checkedMoreThanFiveBillion } from './interfaces/cRaw';
 
-// 스펙주 제외
-async function excludeNameSpec() {}
+const date = new Date();
+const offset = date.getTimezoneOffset() * 60000;
+const dateOffset = new Date(date.getTime() - offset);
 
 // 전일 거래대금 1000억 이상
 async function transactionAmountOfThePreviousDayMoreThan100BillionWon() {
@@ -17,7 +19,14 @@ async function moreThan15percentComparedToThePreviousDay() {
 }
 
 // 전일 순매수 100억이상 (매수 - 매도)
-async function netPurchaseOfThePreviousDayMoreThan10BillionWon() {}
+async function netPurchaseOfThePreviousDayMoreThan10BillionWon() {
+  //
+}
+
+// 스펙주 제외
+async function excludeNameSpec() {
+  //
+}
 
 // 현재가 1000원 이상
 async function theCurrentPriceIsOver1000Won() {
@@ -25,14 +34,8 @@ async function theCurrentPriceIsOver1000Won() {
 }
 
 async function checkedMoreThanFiveBillion(): Promise<
-  {
-    _id: string;
-    theSumOfTheMinutes: number;
-  }[]
+  checkedMoreThanFiveBillion[]
 > {
-  const date = new Date();
-  const offset = date.getTimezoneOffset() * 60000;
-  const dateOffset = new Date(date.getTime() - offset);
   const startMinute = moment(dateOffset)
     .tz('Asia/Seoul')
     .subtract(1, 'minute')
@@ -53,18 +56,22 @@ async function checkedMoreThanFiveBillion(): Promise<
       },
     },
     {
-      $group: {
-        _id: '$code',
-        theSumOfTheMinutes: { $sum: { $multiply: ['$c_price', '$c_volume'] } },
+      $project: {
+        _id: 0,
+        c_time: 1,
+        code: 1,
+        c_price: 1,
+        c_volume: 1,
+        price: { $multiply: ['$c_price', '$c_volume'] },
       },
     },
     {
       $match: {
-        theSumOfTheMinutes: { $gte: 50000000 },
+        price: { $gte: 5000000000 },
       },
     },
     {
-      $sort: { theSumOfTheMinutes: -1 },
+      $sort: { c_time: 1 },
     },
   ]);
 }
@@ -74,19 +81,14 @@ async function sendTelegramMessages(messages: string) {
   const chat_id: string = process.env.TELEGRAM_CHATID!;
   const bot: TelegramBot = new TelegramBot(token);
 
-  await bot.sendMessage(chat_id, `5천↑\n${messages}`);
+  await bot.sendMessage(chat_id, `50억↑\n${messages}`);
 }
 
-function createingTelegramMessages(
-  data: {
-    _id: string;
-    theSumOfTheMinutes: number;
-  }[]
-): string {
+function createingTelegramMessages(data: checkedMoreThanFiveBillion[]): string {
   const arrayMessage: string[] = data.map((value) => {
-    return `${value._id}\t\t:\t\t${value.theSumOfTheMinutes.toLocaleString(
-      'ko-KR'
-    )} \n`;
+    return `${value.c_time.toDateString()}|${value.code}|${value.c_price}|${
+      value.c_volume
+    }| ${value.price.toLocaleString('ko-KR')} \n`;
   });
 
   return arrayMessage.join('');
@@ -95,11 +97,9 @@ function createingTelegramMessages(
 export default function main() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
   schedule.scheduleJob('0 */1 8-20 * * 1-6 ', async () => {
-    const checkedMoreThanFiveBillionData: {
-      _id: string;
-      theSumOfTheMinutes: number;
-    }[] = await checkedMoreThanFiveBillion();
-    console.log(checkedMoreThanFiveBillionData.length);
+    const checkedMoreThanFiveBillionData: checkedMoreThanFiveBillion[] =
+      await checkedMoreThanFiveBillion();
+
     if (!checkedMoreThanFiveBillionData.length) return;
 
     void sendTelegramMessages(

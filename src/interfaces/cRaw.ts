@@ -21,3 +21,11 @@ export interface cRaw {
   c_power: number;
   c_market_price: number;
 }
+
+export interface checkedMoreThanFiveBillion {
+  c_time: Date;
+  code: string;
+  c_price: number;
+  c_volume: number;
+  price: number;
+}
