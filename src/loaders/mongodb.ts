@@ -6,7 +6,7 @@ const connectDB = async () => {
     await mongoose.connect(config.mongoURI);
 
     mongoose.set('autoCreate', true);
-    mongoose.set('strictQuery', false);
+    mongoose.set('strictQuery', true);
 
     console.log(
       `
