@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { cRaw } from '../interfaces/cRaw';
+import { IcRaw } from '../interfaces/cRaw';
 
 const cRawSchema = new mongoose.Schema(
   {
@@ -32,4 +32,4 @@ const cRawSchema = new mongoose.Schema(
 
 cRawSchema.index({ code: 1, c_time: 1 });
 
-export default mongoose.model<cRaw & mongoose.Document>('c_raw', cRawSchema);
+export default mongoose.model<IcRaw & mongoose.Document>('c_raw', cRawSchema);

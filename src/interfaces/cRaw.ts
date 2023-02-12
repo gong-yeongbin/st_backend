@@ -1,4 +1,4 @@
-export interface cRaw {
+export interface IcRaw {
   c_time: Date;
   code: string;
   c_price: number;
@@ -22,10 +22,7 @@ export interface cRaw {
   c_market_price: number;
 }
 
-export interface checkedMoreThanFiveBillion {
-  c_time: Date;
+export interface cRawReturn {
   code: string;
-  c_price: number;
-  c_volume: number;
   price: number;
 }
