@@ -4,6 +4,7 @@ import { cRawReturn } from './interfaces/cRaw';
 import {
   fnaNetPurchaseOfThePreviousDayMoreThan10BillionWon,
   fnCheckedMoreThanFiveBillion,
+  fntransactionAmountOfThePreviousDayMoreThan100BillionWon,
 } from './util/stork';
 
 async function sendTelegramMessages(
@@ -26,40 +27,49 @@ function fnCreateingTelegramMessages(
   arrayMessage = [''];
 
   arrayMessage = data.map((value) => {
-    return `${value.code}|${value.price.toLocaleString('ko-KR')}|\n`;
+    return `${value.code} | ${value.price.toLocaleString('ko-KR')} \n`;
   });
 
   return arrayMessage.join('');
 }
 export default function main() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-  schedule.scheduleJob('0 */1 8-18 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 */1 8-23 * * 1-7 ', async () => {
     const checkedMoreThanFiveBillionData: cRawReturn[] =
       await fnCheckedMoreThanFiveBillion();
 
     if (checkedMoreThanFiveBillionData.length > 0) {
-      await sendTelegramMessages(
+      void sendTelegramMessages(
         '50억 이상',
         fnCreateingTelegramMessages(checkedMoreThanFiveBillionData)
       );
     }
+  });
 
+  schedule.scheduleJob('0 */1 8-23 * * 1-7 ', async () => {
     const netPurchaseOfThePreviousDayMoreThan10BillionWonData: cRawReturn[] =
       await fnaNetPurchaseOfThePreviousDayMoreThan10BillionWon();
 
-    if (checkedMoreThanFiveBillionData.length > 0) {
-      await sendTelegramMessages(
+    if (netPurchaseOfThePreviousDayMoreThan10BillionWonData.length > 0) {
+      void sendTelegramMessages(
         '전일 순매수 100억 이상',
         fnCreateingTelegramMessages(
           netPurchaseOfThePreviousDayMoreThan10BillionWonData
         )
       );
     }
+  });
+  schedule.scheduleJob('0 */1 8-23 * * 1-7 ', async () => {
+    const transactionAmountOfThePreviousDayMoreThan100BillionWonData: cRawReturn[] =
+      await fntransactionAmountOfThePreviousDayMoreThan100BillionWon();
 
-    // await fnaNetPurchaseOfThePreviousDayMoreThan10BillionWon();
-    // if (!checkedMoreThanFiveBillionData.length) return;
-    // void sendTelegramMessages(
-    //   createingTelegramMessages(checkedMoreThanFiveBillionData)
-    // );
+    if (transactionAmountOfThePreviousDayMoreThan100BillionWonData.length > 0) {
+      void sendTelegramMessages(
+        '전일 거래대금 1000억 이상 - 금액(백만)',
+        fnCreateingTelegramMessages(
+          transactionAmountOfThePreviousDayMoreThan100BillionWonData
+        )
+      );
+    }
   });
 }

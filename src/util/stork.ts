@@ -10,9 +10,45 @@ import {
 import mRaw from '../models/mRaw';
 
 // 전일 거래대금 1000억 이상
-export async function fntransactionAmountOfThePreviousDayMoreThan100BillionWon() {
+export async function fntransactionAmountOfThePreviousDayMoreThan100BillionWon(): Promise<
+  cRawReturn[]
+> {
   // 거래대금? 매수, 매도 금액 전체?, 체결 데이터 누적거래 대금?
   const excludeCodes: string[] = await fnExclude();
+  return await cRaw.aggregate([
+    {
+      $match: {
+        $and: [
+          {
+            c_time: {
+              $gte: new Date(startBeforeDate()),
+              $lt: new Date(endBeforeDate()),
+            },
+          },
+          { code: { $in: excludeCodes } },
+        ],
+      },
+    },
+    {
+      $sort: { c_time: -1 },
+    },
+    {
+      $group: {
+        _id: '$code',
+        c_accum_trans_price: { $first: '$c_accum_trans_price' },
+      },
+    },
+    {
+      $match: { c_accum_trans_price: { $gte: 100000 } },
+    },
+    {
+      $project: {
+        _id: 0,
+        code: '$_id',
+        price: '$c_accum_trans_price',
+      },
+    },
+  ]);
 }
 
 // 전일대비 15%이상 (전일1000 -> 1500)
@@ -67,8 +103,8 @@ export async function fnCheckedMoreThanFiveBillion(): Promise<cRawReturn[]> {
     {
       $match: {
         c_time: {
-          $gte: startBeforeMinute(),
-          $lt: endBeforeMinute(),
+          $gte: new Date(startBeforeMinute()),
+          $lt: new Date(endBeforeMinute()),
         },
       },
     },
@@ -90,14 +126,13 @@ export async function fnCheckedMoreThanFiveBillion(): Promise<cRawReturn[]> {
 async function fnExclude(): Promise<string[]> {
   const excludeCode: string[] = await fntheCurrentPriceIsOver1000Won(
     await fnGetExcludeItems()
-  ); // 현재가 1000원 미만(직전 1분 마지막 체결가)
-
+  );
   return excludeCode;
 }
 
 // 스펙주,영업이익률 5% 미만,유보률 800% 미만
 async function fnGetExcludeItems(): Promise<string[]> {
-  return await mRaw.aggregate([
+  const data: { code: string }[] = await mRaw.aggregate([
     {
       $match: {
         $and: [
@@ -115,20 +150,23 @@ async function fnGetExcludeItems(): Promise<string[]> {
       },
     },
   ]);
+  return data.map((value) => {
+    return value.code;
+  });
 }
 
 // 현재가 1000원 이상(직전 1분 마지막 체결가)
 async function fntheCurrentPriceIsOver1000Won(
   codes: string[]
 ): Promise<string[]> {
-  return await cRaw.aggregate([
+  const data: { code: string }[] = await cRaw.aggregate([
     {
       $match: {
         $and: [
           {
             c_time: {
-              $gte: startBeforeMinute(),
-              $lt: endBeforeMinute(),
+              $gte: new Date(startBeforeMinute()),
+              $lt: new Date(endBeforeMinute()),
             },
           },
           { code: { $in: codes } },
@@ -145,7 +183,7 @@ async function fntheCurrentPriceIsOver1000Won(
       },
     },
     {
-      $match: { c_price: { $gt: 1000 } },
+      $match: { c_price: { $gte: 1000 } },
     },
     {
       $project: {
@@ -154,4 +192,7 @@ async function fntheCurrentPriceIsOver1000Won(
       },
     },
   ]);
+  return data.map((value) => {
+    return value.code;
+  });
 }
