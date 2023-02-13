@@ -52,9 +52,66 @@ export async function fntransactionAmountOfThePreviousDayMoreThan100BillionWon()
 }
 
 // 전일대비 15%이상 (전일1000 -> 1500)
-export async function fnmoreThan15percentComparedToThePreviousDay() {
-  // 직전 1분 마지막 체결가
+// 직전 1분 마지막 체결가
+export async function fnmoreThan15percentComparedToThePreviousDay(): Promise<
+  cRawReturn[]
+> {
   const excludeCodes: string[] = await fnExclude();
+  const mRawData: { code: string; lp: number }[] = await mRaw.aggregate([
+    {
+      $match: {
+        $and: [
+          { createdAt: { $eq: startDate() } },
+          { idx: { $in: excludeCodes } },
+        ],
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        code: '$idx',
+        lp: '$lp',
+      },
+    },
+  ]);
+  const cRawData: { code: string; price: number }[] = await cRaw.aggregate([
+    {
+      $match: {
+        $and: [
+          {
+            c_time: {
+              $gte: new Date(startBeforeMinute()),
+              $lt: new Date(endBeforeMinute()),
+            },
+          },
+          { code: { $in: excludeCodes } },
+        ],
+      },
+    },
+    {
+      $sort: { c_time: -1 },
+    },
+    {
+      $group: {
+        _id: '$code',
+        c_price: { $first: '$c_price' },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        code: '$_id',
+        price: '$c_price',
+      },
+    },
+  ]);
+
+  return cRawData.filter((c) => {
+    const mRawFind = mRawData.find((m) => c.code == m.code)!;
+    if (c.price >= mRawFind.lp + mRawFind.lp * 0.15) {
+      return c;
+    }
+  });
 }
 
 // 전일 순매수 100억이상 (매수 - 매도)
@@ -150,6 +207,7 @@ async function fnGetExcludeItems(): Promise<string[]> {
       },
     },
   ]);
+
   return data.map((value) => {
     return value.code;
   });
