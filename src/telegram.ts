@@ -48,7 +48,7 @@ export default function main() {
     }
   });
 
-  // schedule.scheduleJob('0 */1 9-18 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 0 9 * * 1-7 ', async () => {
     const netPurchaseOfThePreviousDayMoreThan10BillionWonData: cRawReturn[] =
       await fnaNetPurchaseOfThePreviousDayMoreThan10BillionWon();
 
@@ -62,7 +62,7 @@ export default function main() {
     }
   });
 
-  // schedule.scheduleJob('0 */1 9-18 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 0 9 * * 1-7 ', async () => {
     const transactionAmountOfThePreviousDayMoreThan100BillionWonData: cRawReturn[] =
       await fntransactionAmountOfThePreviousDayMoreThan100BillionWon();
 
