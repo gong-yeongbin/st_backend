@@ -76,7 +76,7 @@ export default function main() {
     }
   });
 
-  schedule.scheduleJob('0 */1 * * * 1-7 ', async () => {
+  schedule.scheduleJob('0 */1 9-18 * * 1-7 ', async () => {
     const moreThan15percentComparedToThePreviousDayData: cRawReturn[] =
       await fnmoreThan15percentComparedToThePreviousDay();
 
