@@ -13,40 +13,38 @@ const chat_id: string = process.env.TELEGRAM_CHATID!;
 const bot: TelegramBot = new TelegramBot(token, { polling: true });
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
-bot.on('message', async ({ text }) => {
-  if (text == '메뉴') {
-    await bot.sendMessage(
-      chat_id,
-      `1.전일 거래대금 1000억 이상\n2.전일 순매수 100억이상 (매수 - 매도)\n3.전일대비 15%이상`
-    );
-  }
-  if (text == '1') {
-    void sendTelegramMessages(
-      '전일 거래대금 1000억 이상 - 금액(백만)',
-      fnCreateingTelegramMessages(
-        await fntransactionAmountOfThePreviousDayMoreThan100BillionWon()
-      )
-    );
-  }
-  if (text == '2') {
-    void sendTelegramMessages(
-      '전일 순매수 100억 이상',
-      fnCreateingTelegramMessages(
-        await fnaNetPurchaseOfThePreviousDayMoreThan10BillionWon()
-      )
-    );
-  }
-  if (text == '3') {
-    void sendTelegramMessages(
-      '전일대비 15%이상(직전 1분)',
-      fnCreateingTelegramMessages(
-        await fnmoreThan15percentComparedToThePreviousDay()
-      )
-    );
-  }
-  if (text == 'exit') {
-    await bot.stopPolling();
-  }
+bot.onText(/\/메뉴/, async (msg) => {
+  await bot.sendMessage(
+    msg.chat.id,
+    `1.전일 거래대금 1000억 이상\n2.전일 순매수 100억이상 (매수 - 매도)\n3.전일대비 15%이상`
+  );
+});
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+bot.onText(/\/1/, async (msg) => {
+  const message: string = fnCreateingTelegramMessages(
+    await fntransactionAmountOfThePreviousDayMoreThan100BillionWon()
+  );
+  await bot.sendMessage(
+    msg.chat.id,
+    `전일 거래대금 1000억 이상 - 금액(백만)\n${message}`
+  );
+});
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+bot.onText(/\/2/, async (msg) => {
+  const message: string = fnCreateingTelegramMessages(
+    await fnaNetPurchaseOfThePreviousDayMoreThan10BillionWon()
+  );
+  await bot.sendMessage(msg.chat.id, `전일 순매수 100억 이상\n${message}`);
+});
+
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+bot.onText(/\/3/, async (msg) => {
+  const message: string = fnCreateingTelegramMessages(
+    await fnmoreThan15percentComparedToThePreviousDay()
+  );
+  await bot.sendMessage(msg.chat.id, `전일대비 15%이상(직전 1분)\n${message}`);
 });
 
 async function sendTelegramMessages(
