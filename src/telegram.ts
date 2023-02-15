@@ -10,7 +10,7 @@ import {
 
 const token: string = process.env.TELEGRAM_TOKEN!;
 const chat_id: string = process.env.TELEGRAM_CHATID!;
-const bot: TelegramBot = new TelegramBot(token, { polling: true });
+const bot: TelegramBot = new TelegramBot(token);
 
 // eslint-disable-next-line @typescript-eslint/no-misused-promises
 bot.on('message', async ({ text }) => {
