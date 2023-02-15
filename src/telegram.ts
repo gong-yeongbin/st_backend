@@ -44,6 +44,9 @@ bot.on('message', async ({ text }) => {
       )
     );
   }
+  if (text == 'exit') {
+    await bot.stopPolling();
+  }
 });
 
 async function sendTelegramMessages(
