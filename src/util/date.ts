@@ -1,18 +1,5 @@
 import moment from 'moment-timezone';
 
-// const date = new Date();
-//   const offset = date.getTimezoneOffset() * 60000;
-//   const dateOffset = new Date(date.getTime() - offset);
-//   const startBeforeMinute: string = moment(dateOffset)
-//     .tz('Asia/Seoul')
-//     .subtract(1, 'minute')
-//     .startOf('minute')
-//     .toISOString();
-//   const endBeforeMinute: string = moment(dateOffset)
-//     .tz('Asia/Seoul')
-//     .startOf('minute')
-//     .toISOString();
-
 export const startDate = (): string => {
   return moment().tz('Asia/Seoul').format('YYYY-MM-DD');
 };
