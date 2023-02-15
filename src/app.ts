@@ -3,7 +3,10 @@ import 'dotenv/config';
 import mongodb from './loaders/mongodb';
 import telegram from './telegram';
 import config from './configs';
+import index from './routes/index';
+
 const app: Express = express();
+app.use('/', index);
 
 void mongodb();
 void telegram();

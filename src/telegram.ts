@@ -10,9 +10,10 @@ import {
 
 const token: string = process.env.TELEGRAM_TOKEN!;
 const chat_id: string = process.env.TELEGRAM_CHATID!;
-const bot: TelegramBot = new TelegramBot(token, { polling: true });
+const bot: TelegramBot = new TelegramBot(token, {
+  polling: true,
+});
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 bot.onText(/\/메뉴/, async (msg) => {
   await bot.sendMessage(
     msg.chat.id,
@@ -20,7 +21,6 @@ bot.onText(/\/메뉴/, async (msg) => {
   );
 });
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 bot.onText(/\/1/, async (msg) => {
   const message: string = fnCreateingTelegramMessages(
     await fntransactionAmountOfThePreviousDayMoreThan100BillionWon()
@@ -31,7 +31,6 @@ bot.onText(/\/1/, async (msg) => {
   );
 });
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 bot.onText(/\/2/, async (msg) => {
   const message: string = fnCreateingTelegramMessages(
     await fnaNetPurchaseOfThePreviousDayMoreThan10BillionWon()
@@ -39,7 +38,6 @@ bot.onText(/\/2/, async (msg) => {
   await bot.sendMessage(msg.chat.id, `전일 순매수 100억 이상\n${message}`);
 });
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 bot.onText(/\/3/, async (msg) => {
   const message: string = fnCreateingTelegramMessages(
     await fnmoreThan15percentComparedToThePreviousDay()
@@ -68,9 +66,9 @@ function fnCreateingTelegramMessages(
 
   return arrayMessage.join('');
 }
+
 export default function main() {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-
   schedule.scheduleJob('0 */1 9-18 * * 1-7 ', async () => {
     const checkedMoreThanFiveBillionData: cRawReturn[] =
       await fnCheckedMoreThanFiveBillion();
