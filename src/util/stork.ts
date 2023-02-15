@@ -8,12 +8,16 @@ import {
   startDate,
 } from './date';
 import mRaw from '../models/mRaw';
+import { ImRaw } from '../interfaces/mRaw';
 
 // 전일 거래대금 1000억 이상
 export async function fntransactionAmountOfThePreviousDayMoreThan100BillionWon(): Promise<
   cRawReturn[]
 > {
-  const excludeCodes: string[] = await fnGetExcludeItems();
+  const excludeCodes: string[] = (await fnGetExcludeItems()).map((val) => {
+    return val.idx;
+  });
+
   return await cRaw.aggregate([
     {
       $match: {
@@ -55,24 +59,11 @@ export async function fntransactionAmountOfThePreviousDayMoreThan100BillionWon()
 export async function fnmoreThan15percentComparedToThePreviousDay(): Promise<
   cRawReturn[]
 > {
-  const excludeCodes: string[] = await fnGetExcludeItems();
-  const mRawData: { code: string; lp: number }[] = await mRaw.aggregate([
-    {
-      $match: {
-        $and: [
-          { createdAt: { $eq: startDate() } },
-          { idx: { $in: excludeCodes } },
-        ],
-      },
-    },
-    {
-      $project: {
-        _id: 0,
-        code: '$idx',
-        lp: '$lp',
-      },
-    },
-  ]);
+  const mRawData: ImRaw[] = await fnGetExcludeItems();
+  const excludeCodes: string[] = mRawData.map((val) => {
+    return val.idx;
+  });
+
   const cRawData: { code: string; price: number }[] = await cRaw.aggregate([
     {
       $match: {
@@ -106,7 +97,7 @@ export async function fnmoreThan15percentComparedToThePreviousDay(): Promise<
   ]);
 
   return cRawData.filter((c) => {
-    const mRawFind = mRawData.find((m) => c.code == m.code)!;
+    const mRawFind = mRawData.find((m) => c.code == m.idx)!;
     if (c.price >= mRawFind.lp + mRawFind.lp * 0.15) {
       return c;
     }
@@ -117,7 +108,10 @@ export async function fnmoreThan15percentComparedToThePreviousDay(): Promise<
 export async function fnaNetPurchaseOfThePreviousDayMoreThan10BillionWon(): Promise<
   cRawReturn[]
 > {
-  const excludeCodes: string[] = await fnGetExcludeItems();
+  const excludeCodes: string[] = (await fnGetExcludeItems()).map((val) => {
+    return val.idx;
+  });
+
   return await cRaw.aggregate([
     {
       $match: {
@@ -180,8 +174,8 @@ export async function fnCheckedMoreThanFiveBillion(): Promise<cRawReturn[]> {
 }
 
 // 전일 종가 1000원이상, 스펙주,영업이익률 5% 미만,유보률 800% 미만
-async function fnGetExcludeItems(): Promise<string[]> {
-  const data: { code: string }[] = await mRaw.aggregate([
+async function fnGetExcludeItems(): Promise<ImRaw[]> {
+  return await mRaw.aggregate([
     {
       $match: {
         $and: [
@@ -193,63 +187,5 @@ async function fnGetExcludeItems(): Promise<string[]> {
         ],
       },
     },
-    {
-      $project: {
-        _id: 0,
-        code: '$idx',
-      },
-    },
   ]);
-
-  return data.map((value) => {
-    return value.code;
-  });
 }
-// async function fnExclude(): Promise<string[]> {
-//   const excludeCode: string[] = await fntheCurrentPriceIsOver1000Won(
-//     await fnGetExcludeItems()
-//   );
-//   return excludeCode;
-// }
-
-// 현재가 1000원 이상(직전 1분 마지막 체결가)
-// async function fntheCurrentPriceIsOver1000Won(
-//   codes: string[]
-// ): Promise<string[]> {
-//   const data: { code: string }[] = await cRaw.aggregate([
-//     {
-//       $match: {
-//         $and: [
-//           {
-//             c_time: {
-//               $gte: new Date(startBeforeMinute()),
-//               $lt: new Date(endBeforeMinute()),
-//             },
-//           },
-//           { code: { $in: codes } },
-//         ],
-//       },
-//     },
-//     {
-//       $sort: { c_time: -1 },
-//     },
-//     {
-//       $group: {
-//         _id: '$code',
-//         c_price: { $first: '$c_price' },
-//       },
-//     },
-//     {
-//       $match: { c_price: { $gte: 1000 } },
-//     },
-//     {
-//       $project: {
-//         _id: 0,
-//         code: '$_id',
-//       },
-//     },
-//   ]);
-//   return data.map((value) => {
-//     return value.code;
-//   });
-// }

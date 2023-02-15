@@ -46,6 +46,18 @@ export default function main() {
         fnCreateingTelegramMessages(checkedMoreThanFiveBillionData)
       );
     }
+
+    const moreThan15percentComparedToThePreviousDayData: cRawReturn[] =
+      await fnmoreThan15percentComparedToThePreviousDay();
+
+    if (moreThan15percentComparedToThePreviousDayData.length > 0) {
+      void sendTelegramMessages(
+        '전일대비 15%이상',
+        fnCreateingTelegramMessages(
+          moreThan15percentComparedToThePreviousDayData
+        )
+      );
+    }
   });
 
   schedule.scheduleJob('0 0 9 * * 1-7 ', async () => {
@@ -60,9 +72,7 @@ export default function main() {
         )
       );
     }
-  });
 
-  schedule.scheduleJob('0 0 9 * * 1-7 ', async () => {
     const transactionAmountOfThePreviousDayMoreThan100BillionWonData: cRawReturn[] =
       await fntransactionAmountOfThePreviousDayMoreThan100BillionWon();
 
@@ -71,20 +81,6 @@ export default function main() {
         '전일 거래대금 1000억 이상 - 금액(백만)',
         fnCreateingTelegramMessages(
           transactionAmountOfThePreviousDayMoreThan100BillionWonData
-        )
-      );
-    }
-  });
-
-  schedule.scheduleJob('0 */1 9-18 * * 1-7 ', async () => {
-    const moreThan15percentComparedToThePreviousDayData: cRawReturn[] =
-      await fnmoreThan15percentComparedToThePreviousDay();
-
-    if (moreThan15percentComparedToThePreviousDayData.length > 0) {
-      void sendTelegramMessages(
-        '전일대비 15%이상',
-        fnCreateingTelegramMessages(
-          moreThan15percentComparedToThePreviousDayData
         )
       );
     }
