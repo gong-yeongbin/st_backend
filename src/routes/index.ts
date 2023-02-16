@@ -1,13 +1,8 @@
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
+import storkRouter from './stork';
 
 const router: Router = Router();
 
-router.use('/', (req: Request, res: Response) => {
-  console.log('Hello World...!!!');
-});
-
-router.use('/st', (req: Request, res: Response) => {
-  console.log('Hello World...!!!');
-});
+router.use('/st', storkRouter);
 
 export default router;

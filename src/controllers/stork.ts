@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { cRawReturn } from '../interfaces/cRaw';
 import storkService from '../services/stork';
 
 const storkController = {
@@ -6,22 +7,55 @@ const storkController = {
     req: Request,
     res: Response
   ) => {
-    await storkService.transactionAmountOfThePreviousDayMoreThan100BillionWon();
+    try {
+      const transactionAmountOfThePreviousDayMoreThan100BillionWonData: cRawReturn[] =
+        await storkService.transactionAmountOfThePreviousDayMoreThan100BillionWon();
+
+      return res.json(
+        transactionAmountOfThePreviousDayMoreThan100BillionWonData
+      );
+    } catch (error) {
+      console.log(error);
+    }
   },
+
   moreThan15percentComparedToThePreviousDay: async (
     req: Request,
     res: Response
   ) => {
-    await storkService.moreThan15percentComparedToThePreviousDay();
+    try {
+      const moreThan15percentComparedToThePreviousDayData: cRawReturn[] =
+        await storkService.moreThan15percentComparedToThePreviousDay();
+
+      return res.json(moreThan15percentComparedToThePreviousDayData);
+    } catch (error) {
+      console.log(error);
+    }
   },
+
   aNetPurchaseOfThePreviousDayMoreThan10BillionWon: async (
     req: Request,
     res: Response
   ) => {
-    await storkService.aNetPurchaseOfThePreviousDayMoreThan10BillionWon();
+    try {
+      const aNetPurchaseOfThePreviousDayMoreThan10BillionWonData: cRawReturn[] =
+        await storkService.aNetPurchaseOfThePreviousDayMoreThan10BillionWon();
+
+      return res.json(aNetPurchaseOfThePreviousDayMoreThan10BillionWonData);
+    } catch (error) {
+      console.log(error);
+    }
   },
+
   checkedMoreThanFiveBillion: async (req: Request, res: Response) => {
-    await storkService.checkedMoreThanFiveBillion();
+    try {
+      const checkedMoreThanFiveBillionData: cRawReturn[] =
+        await storkService.checkedMoreThanFiveBillion();
+
+      return res.json(checkedMoreThanFiveBillionData);
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
 

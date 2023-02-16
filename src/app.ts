@@ -9,7 +9,7 @@ const app: Express = express();
 app.use('/', index);
 
 void mongodb();
-void telegram();
+// void telegram();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
