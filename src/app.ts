@@ -1,4 +1,5 @@
 import express, { Express } from 'express';
+import cors from 'cors';
 import 'dotenv/config';
 import mongodb from './loaders/mongodb';
 import telegram from './telegram';
@@ -6,6 +7,7 @@ import config from './configs';
 import index from './routes/index';
 
 const app: Express = express();
+app.use(cors());
 app.use('/', index);
 
 void mongodb();

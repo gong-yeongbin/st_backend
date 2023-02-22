@@ -10,6 +10,6 @@ if (envFound.error) {
 export default {
   port: parseInt(process.env.PORT as string),
   mongoURI: process.env.MONGO_URI as string,
-  token: process.env.TELEGRAM_TOKEN,
-  chatId: process.env.TELEGRAM_CHATID,
+  // token: process.env.TELEGRAM_TOKEN,
+  // chatId: process.env.TELEGRAM_CHATID,
 };
