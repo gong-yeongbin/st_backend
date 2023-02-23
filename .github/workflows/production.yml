@@ -1,6 +1,6 @@
 name: Build & Deploy
 env:
-  PROJECT_NAME: stork-analysis
+  PROJECT_NAME: st_backend
 
 on:
   push:
@@ -48,4 +48,4 @@ jobs:
             ./$GITHUB_SHA.tgz s3://deploy-archive/$PROJECT_NAME/$GITHUB_SHA.tgz
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name stork-analysis --file-exists-behavior OVERWRITE --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name stork-analysis-deploy-group --s3-location bucket=deploy-archive,bundleType=tgz,key=$PROJECT_NAME/$GITHUB_SHA.tgz
+        run: aws deploy create-deployment --application-name st_backend --file-exists-behavior OVERWRITE --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name st_backend --s3-location bucket=deploy-archive,bundleType=tgz,key=$PROJECT_NAME/$GITHUB_SHA.tgz
