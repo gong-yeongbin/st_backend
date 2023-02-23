@@ -27,7 +27,7 @@ const storkController = {
       const moreThan15percentComparedToThePreviousDayData: cRawReturn[] =
         await storkService.moreThan15percentComparedToThePreviousDay();
 
-      return res.json({ data: moreThan15percentComparedToThePreviousDayData });
+      return res.json(moreThan15percentComparedToThePreviousDayData);
     } catch (error) {
       console.log(error);
     }
@@ -52,7 +52,7 @@ const storkController = {
       const checkedMoreThanFiveBillionData: cRawReturn[] =
         await storkService.checkedMoreThanFiveBillion();
 
-      return res.json({ data: checkedMoreThanFiveBillionData });
+      return res.json(checkedMoreThanFiveBillionData);
     } catch (error) {
       console.log(error);
     }
