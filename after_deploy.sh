@@ -1,4 +1,4 @@
-REPOSITORY=/home/ubuntu/stork-analysis
+REPOSITORY=/home/ubuntu/st_backend
 cd $REPOSITORY
 
 npm run build
