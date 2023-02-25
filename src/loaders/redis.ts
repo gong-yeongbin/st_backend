@@ -5,7 +5,7 @@ export default (async function () {
   const redisInfo = {
     host: config.redis_host,
     port: config.redis_port,
-    password: config.redis_password,
+    legacyMode: true,
   };
   const client = redis.createClient(redisInfo);
 
@@ -15,6 +15,4 @@ export default (async function () {
 
   await client.connect();
   await client.set('connect', 'success');
-  console.log(await client.get('connect'));
-  await client.del('connect');
 })();
