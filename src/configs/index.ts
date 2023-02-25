@@ -17,7 +17,6 @@ export default {
   mysql_database: process.env.MYSQL_DATABASE as string,
   redis_port: parseInt(process.env.REDIS_PORT as string),
   redis_host: process.env.REDIS_HOST as string,
-  redis_password: process.env.REDIS_PASSWORD as string,
   // token: process.env.TELEGRAM_TOKEN,
   // chatId: process.env.TELEGRAM_CHATID,
 };
