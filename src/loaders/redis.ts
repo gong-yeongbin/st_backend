@@ -7,15 +7,14 @@ export default (async function () {
     port: config.redis_port,
     password: config.redis_password,
   };
-  const redisClient = redis.createClient(redisInfo);
+  const client = redis.createClient(redisInfo);
 
-  redisClient.on('connect', () => {
-    console.log('Redis Connect Success');
-  });
-
-  redisClient.on('error', (err) => {
+  client.on('error', (err) => {
     console.error('Redis Client Error', err);
   });
 
-  await redisClient.connect();
+  await client.connect();
+  await client.set('connect', 'success');
+  console.log(await client.get('connect'));
+  await client.del('connect');
 })();
