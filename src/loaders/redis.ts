@@ -9,6 +9,10 @@ export default (async function () {
   };
   const redisClient = redis.createClient(redisInfo);
 
+  redisClient.on('connect', (err) => {
+    console.log('Redis Connect Success');
+  });
+
   redisClient.on('error', (err) => {
     console.error('Redis Client Error', err);
   });
