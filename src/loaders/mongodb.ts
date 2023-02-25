@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import config from '../configs';
 
-const connectDB = async () => {
+export default (async function () {
   try {
     await mongoose.connect(config.mongoURI);
 
@@ -10,16 +10,13 @@ const connectDB = async () => {
 
     console.log(
       `
-        ###############################################
+        #########################################################
                 Mongodb Connection...         
-        ###############################################
+        #########################################################
       `
     );
   } catch (error: any) {
-    // eslint-disable-next-line
     console.error(error.message);
     process.exit(1);
   }
-};
-
-export default connectDB;
+})();

@@ -1,8 +1,9 @@
+import 'reflect-metadata';
 import express, { Express } from 'express';
 import cors from 'cors';
 import 'dotenv/config';
-import mongodb from './loaders/mongodb';
-import telegram from './telegram';
+import './loaders/mongodb';
+import './loaders/myqls';
 import config from './configs';
 import index from './routes/index';
 
@@ -10,19 +11,16 @@ const app: Express = express();
 app.use(cors());
 app.use('/', index);
 
-void mongodb();
-// void telegram();
-
-app.use(express.urlencoded({ extended: true }));
+void app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app
   .listen(config.port, () => {
     console.log(
       `
-        ###############################################
+        #########################################################
                 Server listening on port : ${config.port}        
-        ###############################################
+        #########################################################
     `
     );
   })
