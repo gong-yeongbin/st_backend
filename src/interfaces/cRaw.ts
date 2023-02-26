@@ -20,6 +20,7 @@ export interface IcRaw {
   c_trans_price: number;
   c_power: number;
   c_market_price: number;
+  b_price?: number;
 }
 
 export interface cRawReturn {

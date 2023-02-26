@@ -3,9 +3,9 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import 'dotenv/config';
 import './loaders/mongodb';
-// import './loaders/myqls';
+import './loaders/mysql';
 import './loaders/redis';
-import config from './configs';
+import config from './config';
 import index from './routes/index';
 
 const app: Express = express();

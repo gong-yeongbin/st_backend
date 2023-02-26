@@ -8,12 +8,12 @@ import {
 } from '../util/date';
 import mRaw from '../models/mRaw';
 import { ImRaw } from '../interfaces/mRaw';
-import { cRawReturn } from '../interfaces/cRaw';
+import { IcRaw } from '../interfaces/cRaw';
 
 const storkService = {
   // 전일 거래대금 1000억 이상
   transactionAmountOfThePreviousDayMoreThan100BillionWon: async (): Promise<
-    cRawReturn[]
+    IcRaw[]
   > => {
     const excludeCodes: string[] = (await storkService.getExcludeItems()).map(
       (val) => {
@@ -41,7 +41,26 @@ const storkService = {
       {
         $group: {
           _id: '$code',
+          c_time: { $first: '$c_time' },
+          c_price: { $first: '$c_price' },
+          c_prev_com: { $first: '$c_prev_com' },
+          c_updown_rate: { $first: '$c_updown_rate' },
+          c_accum_volume: { $first: '$c_accum_volume' },
           c_accum_trans_price: { $first: '$c_accum_trans_price' },
+          c_volume: { $first: '$c_volume' },
+          c_sprice: { $first: '$c_sprice' },
+          c_hprice: { $first: '$c_hprice' },
+          c_lprice: { $first: '$c_lprice' },
+          c_prev_com_sym: { $first: '$c_prev_com_sym' },
+          c_prev_trans_com_cnt: { $first: '$c_prev_trans_com_cnt' },
+          c_price_sell: { $first: '$c_price_sell' },
+          c_price_buy: { $first: '$c_price_buy' },
+          c_trans_price_inc: { $first: '$c_trans_price_inc' },
+          c_prev_trans_com_rat: { $first: '$c_prev_trans_com_rat' },
+          c_trans_rot: { $first: '$c_trans_rot' },
+          c_trans_price: { $first: '$c_trans_price' },
+          c_power: { $first: '$c_power' },
+          c_market_price: { $first: '$c_market_price' },
         },
       },
       {
@@ -51,7 +70,26 @@ const storkService = {
         $project: {
           _id: 0,
           code: '$_id',
-          price: '$c_accum_trans_price',
+          c_time: 1,
+          c_price: 1,
+          c_prev_com: 1,
+          c_updown_rate: 1,
+          c_accum_volume: 1,
+          c_accum_trans_price: 1,
+          c_volume: 1,
+          c_sprice: 1,
+          c_hprice: 1,
+          c_lprice: 1,
+          c_prev_com_sym: 1,
+          c_prev_trans_com_cnt: 1,
+          c_price_sell: 1,
+          c_price_buy: 1,
+          c_trans_price_inc: 1,
+          c_prev_trans_com_rat: 1,
+          c_trans_rot: 1,
+          c_trans_price: 1,
+          c_power: 1,
+          c_market_price: 1,
         },
       },
     ]);
@@ -59,15 +97,13 @@ const storkService = {
 
   // 전일대비 15%이상 (전일1000 -> 1500)
   // 직전 1분 마지막 체결가
-  moreThan15percentComparedToThePreviousDay: async (): Promise<
-    cRawReturn[]
-  > => {
+  moreThan15percentComparedToThePreviousDay: async (): Promise<IcRaw[]> => {
     const excludeItems: ImRaw[] = await storkService.getExcludeItems();
     const excludeCodes: string[] = excludeItems.map((val) => {
       return val.idx;
     });
 
-    const cRawData: cRawReturn[] = await cRaw.aggregate([
+    const cRawData: IcRaw[] = await cRaw.aggregate([
       {
         $match: {
           $and: [
@@ -87,21 +123,59 @@ const storkService = {
       {
         $group: {
           _id: '$code',
-          price: { $first: '$c_price' },
+          c_time: { $first: '$c_time' },
+          c_price: { $first: '$c_price' },
+          c_prev_com: { $first: '$c_prev_com' },
+          c_updown_rate: { $first: '$c_updown_rate' },
+          c_accum_volume: { $first: '$c_accum_volume' },
+          c_accum_trans_price: { $first: '$c_accum_trans_price' },
+          c_volume: { $first: '$c_volume' },
+          c_sprice: { $first: '$c_sprice' },
+          c_hprice: { $first: '$c_hprice' },
+          c_lprice: { $first: '$c_lprice' },
+          c_prev_com_sym: { $first: '$c_prev_com_sym' },
+          c_prev_trans_com_cnt: { $first: '$c_prev_trans_com_cnt' },
+          c_price_sell: { $first: '$c_price_sell' },
+          c_price_buy: { $first: '$c_price_buy' },
+          c_trans_price_inc: { $first: '$c_trans_price_inc' },
+          c_prev_trans_com_rat: { $first: '$c_prev_trans_com_rat' },
+          c_trans_rot: { $first: '$c_trans_rot' },
+          c_trans_price: { $first: '$c_trans_price' },
+          c_power: { $first: '$c_power' },
+          c_market_price: { $first: '$c_market_price' },
         },
       },
       {
         $project: {
           _id: 0,
           code: '$_id',
-          price: 1,
+          c_time: 1,
+          c_price: 1,
+          c_prev_com: 1,
+          c_updown_rate: 1,
+          c_accum_volume: 1,
+          c_accum_trans_price: 1,
+          c_volume: 1,
+          c_sprice: 1,
+          c_hprice: 1,
+          c_lprice: 1,
+          c_prev_com_sym: 1,
+          c_prev_trans_com_cnt: 1,
+          c_price_sell: 1,
+          c_price_buy: 1,
+          c_trans_price_inc: 1,
+          c_prev_trans_com_rat: 1,
+          c_trans_rot: 1,
+          c_trans_price: 1,
+          c_power: 1,
+          c_market_price: 1,
         },
       },
     ]);
 
     return cRawData.filter((cRaw) => {
       const mRawData = excludeItems.find((mRaw) => cRaw.code == mRaw.idx)!;
-      if (cRaw.price >= mRawData.lp + mRawData.lp * 0.15) {
+      if (cRaw.c_price >= mRawData.lp + mRawData.lp * 0.15) {
         return cRaw;
       }
     });
@@ -109,7 +183,7 @@ const storkService = {
 
   // 전일 순매수 100억이상 (매수 - 매도)
   aNetPurchaseOfThePreviousDayMoreThan10BillionWon: async (): Promise<
-    cRawReturn[]
+    IcRaw[]
   > => {
     const excludeCodes: string[] = (await storkService.getExcludeItems()).map(
       (val) => {
@@ -134,26 +208,66 @@ const storkService = {
       {
         $group: {
           _id: '$code',
-          price: { $sum: { $multiply: ['$c_price', '$c_volume'] } },
+          c_time: { $first: '$c_time' },
+          c_price: { $first: '$c_price' },
+          c_prev_com: { $first: '$c_prev_com' },
+          c_updown_rate: { $first: '$c_updown_rate' },
+          c_accum_volume: { $first: '$c_accum_volume' },
+          c_accum_trans_price: { $first: '$c_accum_trans_price' },
+          c_volume: { $first: '$c_volume' },
+          c_sprice: { $first: '$c_sprice' },
+          c_hprice: { $first: '$c_hprice' },
+          c_lprice: { $first: '$c_lprice' },
+          c_prev_com_sym: { $first: '$c_prev_com_sym' },
+          c_prev_trans_com_cnt: { $first: '$c_prev_trans_com_cnt' },
+          c_price_sell: { $first: '$c_price_sell' },
+          c_price_buy: { $first: '$c_price_buy' },
+          c_trans_price_inc: { $first: '$c_trans_price_inc' },
+          c_prev_trans_com_rat: { $first: '$c_prev_trans_com_rat' },
+          c_trans_rot: { $first: '$c_trans_rot' },
+          c_trans_price: { $first: '$c_trans_price' },
+          c_power: { $first: '$c_power' },
+          c_market_price: { $first: '$c_market_price' },
+          b_price: { $sum: { $multiply: ['$c_price', '$c_volume'] } },
         },
       },
       {
         $match: {
-          price: { $gte: 10000000000 },
+          b_price: { $gte: 10000000000 },
         },
       },
       {
         $project: {
           _id: 0,
           code: '$_id',
-          price: 1,
+          c_time: 1,
+          c_price: 1,
+          c_prev_com: 1,
+          c_updown_rate: 1,
+          c_accum_volume: 1,
+          c_accum_trans_price: 1,
+          c_volume: 1,
+          c_sprice: 1,
+          c_hprice: 1,
+          c_lprice: 1,
+          c_prev_com_sym: 1,
+          c_prev_trans_com_cnt: 1,
+          c_price_sell: 1,
+          c_price_buy: 1,
+          c_trans_price_inc: 1,
+          c_prev_trans_com_rat: 1,
+          c_trans_rot: 1,
+          c_trans_price: 1,
+          c_power: 1,
+          c_market_price: 1,
+          b_price: 1,
         },
       },
     ]);
   },
 
   // 50억 이상 채결
-  checkedMoreThanFiveBillion: async (): Promise<cRawReturn[]> => {
+  checkedMoreThanFiveBillion: async (): Promise<IcRaw[]> => {
     return await cRaw.aggregate([
       {
         $match: {
@@ -166,13 +280,33 @@ const storkService = {
       {
         $project: {
           _id: 0,
-          code: 1,
-          price: { $multiply: ['$c_price', '$c_volume'] },
+          code: '$_id',
+          c_time: 1,
+          c_price: 1,
+          c_prev_com: 1,
+          c_updown_rate: 1,
+          c_accum_volume: 1,
+          c_accum_trans_price: 1,
+          c_volume: 1,
+          c_sprice: 1,
+          c_hprice: 1,
+          c_lprice: 1,
+          c_prev_com_sym: 1,
+          c_prev_trans_com_cnt: 1,
+          c_price_sell: 1,
+          c_price_buy: 1,
+          c_trans_price_inc: 1,
+          c_prev_trans_com_rat: 1,
+          c_trans_rot: 1,
+          c_trans_price: 1,
+          c_power: 1,
+          c_market_price: 1,
+          b_price: { $multiply: ['$c_price', '$c_volume'] },
         },
       },
       {
         $match: {
-          price: { $gte: 5000000000 },
+          b_price: { $gte: 5000000000 },
         },
       },
     ]);

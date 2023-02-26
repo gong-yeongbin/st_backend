@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { cRawReturn } from '../interfaces/cRaw';
+import { IcRaw } from '../interfaces/cRaw';
 import storkService from '../services/stork';
 
 const storkController = {
@@ -8,7 +8,7 @@ const storkController = {
     res: Response
   ) => {
     try {
-      const transactionAmountOfThePreviousDayMoreThan100BillionWonData: cRawReturn[] =
+      const transactionAmountOfThePreviousDayMoreThan100BillionWonData: IcRaw[] =
         await storkService.transactionAmountOfThePreviousDayMoreThan100BillionWon();
 
       return res.json(
@@ -24,7 +24,7 @@ const storkController = {
     res: Response
   ) => {
     try {
-      const moreThan15percentComparedToThePreviousDayData: cRawReturn[] =
+      const moreThan15percentComparedToThePreviousDayData: IcRaw[] =
         await storkService.moreThan15percentComparedToThePreviousDay();
 
       return res.json(moreThan15percentComparedToThePreviousDayData);
@@ -38,7 +38,7 @@ const storkController = {
     res: Response
   ) => {
     try {
-      const aNetPurchaseOfThePreviousDayMoreThan10BillionWonData: cRawReturn[] =
+      const aNetPurchaseOfThePreviousDayMoreThan10BillionWonData: IcRaw[] =
         await storkService.aNetPurchaseOfThePreviousDayMoreThan10BillionWon();
 
       return res.json(aNetPurchaseOfThePreviousDayMoreThan10BillionWonData);
@@ -49,7 +49,7 @@ const storkController = {
 
   checkedMoreThanFiveBillion: async (req: Request, res: Response) => {
     try {
-      const checkedMoreThanFiveBillionData: cRawReturn[] =
+      const checkedMoreThanFiveBillionData: IcRaw[] =
         await storkService.checkedMoreThanFiveBillion();
 
       return res.json(checkedMoreThanFiveBillionData);

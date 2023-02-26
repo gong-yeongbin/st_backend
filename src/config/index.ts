@@ -1,10 +1,13 @@
 import dotenv from 'dotenv';
 
-const envFound = dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
+const envFound = dotenv.config({
+  path:
+    process.env.NODE_ENV == undefined || process.env.NODE_ENV == 'local'
+      ? `.env.local`
+      : `.env.${process.env.NODE_ENV}`,
+});
 
-if (envFound.error) {
-  throw new Error("⚠️  Couldn't find .env file  ⚠️");
-}
+if (envFound.error) throw new Error("⚠️  Couldn't find .env file  ⚠️");
 
 export default {
   port: parseInt(process.env.PORT as string),
