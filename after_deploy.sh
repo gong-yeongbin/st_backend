@@ -3,4 +3,4 @@ cd $REPOSITORY
 
 npm install
 pm2 start npm -- start
-npm run typeorm migration:run -- -d ./src/loaders/mysql.js
+npm run typeorm migration:run -- -d ./dist/src/loaders/mysql.js
