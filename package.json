@@ -4,8 +4,8 @@
   "description": "express server",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/app.js",
-    "start:dev": "npm run build:live",
+    "start": "NODE_ENV=prod node dist/app.js dotenv -e .env.prod",
+    "start:dev": "NODE_ENV=local npm run build:live",
     "build": "rimraf ./dist && tsc -p .",
     "build:live": "nodemon --watch 'src/**/*.ts' --exec \"ts-node\" src/app.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",

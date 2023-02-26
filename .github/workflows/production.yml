@@ -27,7 +27,7 @@ jobs:
       - name: Create env file
         run: |
           touch .env	
-          cat << EOF >> .env	
+          cat << EOF >> .env.prod	
           ${{ secrets.PROD }}
 
       - name: Make tar file
