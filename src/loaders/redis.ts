@@ -2,11 +2,13 @@ import * as redis from 'redis';
 
 const redisClient = redis.createClient();
 redisClient.connect().then(() =>
-  console.log(`
+  console.log(
+    `
         #########################################################
-                  Redis Connection...
+                Redis Connection...
         #########################################################
-`)
+      `
+  )
 );
 
 export default redisClient;
