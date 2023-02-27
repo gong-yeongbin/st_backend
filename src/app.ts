@@ -5,6 +5,7 @@ import 'dotenv/config';
 import './loaders/mongodb';
 import './loaders/mysql';
 import './loaders/redis';
+import './scheduler';
 import config from './config';
 import index from './routes/index';
 

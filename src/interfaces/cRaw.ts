@@ -1,5 +1,5 @@
 export interface IcRaw {
-  c_time: Date;
+  c_time: string;
   code: string;
   c_price: number;
   c_prev_com: number;
@@ -21,9 +21,4 @@ export interface IcRaw {
   c_power: number;
   c_market_price: number;
   b_price?: number;
-}
-
-export interface cRawReturn {
-  code: string;
-  price: number;
 }
