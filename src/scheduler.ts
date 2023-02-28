@@ -14,13 +14,12 @@ export default (function main() {
   const log5billRepository: Repository<log_5bill> = appDataSource.getRepository(log_5bill);
   const log15perRepository: Repository<log_15per> = appDataSource.getRepository(log_15per);
 
-  // 9시 호출
-  schedule.scheduleJob('0 55 08 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 0 1 * * 1-7 ', async () => {
     // 전일 거래대금 1000억 이상
     const prev100bill: IcRaw[] = await storkService.transactionAmountOfThePreviousDayMoreThan100BillionWon();
 
     if (prev100bill.length > 0) {
-      console.log('prev100bill : ', prev100bill);
+      console.log('prev100bill : ', prev100bill.length);
       await logPrev100billRepository.save(prev100bill);
     }
 
@@ -28,7 +27,7 @@ export default (function main() {
     const prev10bill: IcRaw[] = await storkService.aNetPurchaseOfThePreviousDayMoreThan10BillionWon();
 
     if (prev10bill.length > 0) {
-      console.log('prev10bill : ', prev10bill);
+      console.log('prev10bill : ', prev10bill.length);
       await logPrev10billRepository.save(prev10bill);
     }
   });

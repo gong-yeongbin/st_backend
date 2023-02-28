@@ -1,6 +1,6 @@
-import cRaw from '../models/cRaw';
 import { endBeforeDate, endBeforeMinute, startBeforeDate, startBeforeMinute, startDate } from '../util/date';
 import mRaw from '../models/mRaw';
+import cRaw from '../models/cRaw';
 import { ImRaw } from '../interfaces/mRaw';
 import { IcRaw } from '../interfaces/cRaw';
 
@@ -281,7 +281,7 @@ const storkService = {
         {
           $project: {
             _id: 0,
-            code: '$_id',
+            code: 1,
             c_time: 1,
             c_price: 1,
             c_prev_com: 1,
