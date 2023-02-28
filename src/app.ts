@@ -13,7 +13,7 @@ const app: Express = express();
 app.use(cors());
 app.use('/', index);
 
-void app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app

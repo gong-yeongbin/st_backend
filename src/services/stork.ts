@@ -17,8 +17,8 @@ const storkService = {
             $and: [
               {
                 c_time: {
-                  $gte: new Date(startBeforeDate()),
-                  $lt: new Date(endBeforeDate()),
+                  $gte: startBeforeDate(),
+                  $lt: endBeforeDate(),
                 },
               },
               { code: { $nin: excludeCodes } },
@@ -104,8 +104,8 @@ const storkService = {
             $and: [
               {
                 c_time: {
-                  $gte: new Date(startBeforeMinute()),
-                  $lt: new Date(endBeforeMinute()),
+                  $gte: startBeforeMinute(),
+                  $lt: endBeforeMinute(),
                 },
               },
               { code: { $nin: excludeCodes } },
@@ -174,7 +174,7 @@ const storkService = {
 
     return cRawData.filter((cRaw) => {
       const mRawData = excludeItems.find((mRaw) => cRaw.code == mRaw.idx)!;
-      if (cRaw.c_price >= mRawData.lp + mRawData.lp * 0.15) {
+      if (mRawData && cRaw.c_price >= mRawData.lp + mRawData.lp * 0.15) {
         return cRaw;
       }
     });
@@ -193,8 +193,8 @@ const storkService = {
             $and: [
               {
                 c_time: {
-                  $gte: new Date(startBeforeDate()),
-                  $lt: new Date(endBeforeDate()),
+                  $gte: startBeforeDate(),
+                  $lt: endBeforeDate(),
                 },
               },
               { code: { $nin: excludeCodes } },
@@ -273,8 +273,8 @@ const storkService = {
         {
           $match: {
             c_time: {
-              $gte: new Date(startBeforeMinute()),
-              $lt: new Date(endBeforeMinute()),
+              $gte: startBeforeMinute(),
+              $lt: endBeforeMinute(),
             },
           },
         },

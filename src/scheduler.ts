@@ -19,14 +19,16 @@ export default (function main() {
     // 전일 거래대금 1000억 이상
     const prev100bill: IcRaw[] = await storkService.transactionAmountOfThePreviousDayMoreThan100BillionWon();
 
-    if (prev100bill.length >= 0) {
+    if (prev100bill.length > 0) {
+      console.log('prev100bill : ', prev100bill);
       await logPrev100billRepository.save(prev100bill);
     }
 
     // 전일 순매수 100억이상 (매수 - 매도)
     const prev10bill: IcRaw[] = await storkService.aNetPurchaseOfThePreviousDayMoreThan10BillionWon();
 
-    if (prev10bill.length >= 0) {
+    if (prev10bill.length > 0) {
+      console.log('prev10bill : ', prev10bill);
       await logPrev10billRepository.save(prev10bill);
     }
   });
@@ -36,14 +38,16 @@ export default (function main() {
     // 50억 이상 채결
     const log5bill: IcRaw[] = await storkService.checkedMoreThanFiveBillion();
 
-    if (log5bill.length >= 0) {
+    if (log5bill.length > 0) {
+      console.log('log5bill : ', log5bill.length);
       await log5billRepository.save(log5bill);
     }
 
     // 전일대비 15%이상
     const log15per: IcRaw[] = await storkService.moreThan15percentComparedToThePreviousDay();
 
-    if (log15per.length >= 0) {
+    if (log15per.length > 0) {
+      console.log('log15per : ', log15per.length);
       await log15perRepository.save(log15per);
     }
   });

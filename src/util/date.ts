@@ -8,27 +8,22 @@ export const endDate = (): string => {
 };
 
 export const startBeforeDate = (): string => {
-  const week: number = moment('2023-02-22').day();
+  const week: number = moment().tz('Asia/Seoul').day();
   return week == 6
-    ? moment('2023-02-22').subtract(1, 'day').format('YYYY-MM-DD')
+    ? moment().tz('Asia/Seoul').subtract(1, 'day').format('YYYY-MM-DD')
     : week == 0
-    ? moment('2023-02-22').subtract(2, 'day').format('YYYY-MM-DD')
+    ? moment().tz('Asia/Seoul').subtract(2, 'day').format('YYYY-MM-DD')
     : week == 1
-    ? moment('2023-02-22').subtract(3, 'day').format('YYYY-MM-DD')
-    : moment('2023-02-22').subtract(1, 'day').format('YYYY-MM-DD');
+    ? moment().tz('Asia/Seoul').subtract(3, 'day').format('YYYY-MM-DD')
+    : moment().tz('Asia/Seoul').subtract(1, 'day').format('YYYY-MM-DD');
 };
 export const endBeforeDate = (): string => {
-  return moment('2023-02-22').format('YYYY-MM-DD');
+  return moment().tz('Asia/Seoul').format('YYYY-MM-DD');
 };
 
 export const startBeforeMinute = (): string => {
-  return moment(moment().valueOf() + moment().tz('Asia/Seoul').utcOffset() * 60000)
-    .subtract(1, 'minute')
-    .startOf('minute')
-    .toISOString();
+  return moment().tz('Asia/Seoul').subtract(1, 'minute').startOf('minute').format('YYYY-MM-DD HH:mm:ss');
 };
 export const endBeforeMinute = (): string => {
-  return moment(moment().valueOf() + moment().tz('Asia/Seoul').utcOffset() * 60000)
-    .startOf('minute')
-    .toISOString();
+  return moment().tz('Asia/Seoul').startOf('minute').format('YYYY-MM-DD HH:mm:ss');
 };
