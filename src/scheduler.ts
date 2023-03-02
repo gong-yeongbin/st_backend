@@ -7,7 +7,7 @@ import { log_15per } from './entities/log_15per';
 import { log_prev10bill } from './entities/log_prev10bill';
 import { log_prev100bill } from './entities/log_prev100bill';
 import { Repository } from 'typeorm';
-import crawling from '../src/crawling';
+import crawling from './crawling';
 
 export default (function main() {
   const logPrev100billRepository: Repository<log_prev100bill> = appDataSource.getRepository(log_prev100bill);
