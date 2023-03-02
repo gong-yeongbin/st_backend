@@ -15,7 +15,7 @@ export default (function main() {
   const log5billRepository: Repository<log_5bill> = appDataSource.getRepository(log_5bill);
   const log15perRepository: Repository<log_15per> = appDataSource.getRepository(log_15per);
 
-  schedule.scheduleJob('0 45 16 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 5 17 * * 1-7 ', async () => {
     crawling();
   });
 
