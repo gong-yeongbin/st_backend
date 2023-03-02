@@ -338,6 +338,10 @@ const storkService = {
       }
     );
   },
+
+  getMrawList: async (): Promise<ImRaw[]> => {
+    return await mRaw.aggregate([{ $match: { createdAt: { $eq: startDate() } } }]);
+  },
 };
 
 export default storkService;
