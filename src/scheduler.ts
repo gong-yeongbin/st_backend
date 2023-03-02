@@ -7,6 +7,7 @@ import { log_15per } from './entities/log_15per';
 import { log_prev10bill } from './entities/log_prev10bill';
 import { log_prev100bill } from './entities/log_prev100bill';
 import { Repository } from 'typeorm';
+import moment from 'moment-timezone';
 
 export default (function main() {
   const logPrev100billRepository: Repository<log_prev100bill> = appDataSource.getRepository(log_prev100bill);
@@ -38,7 +39,7 @@ export default (function main() {
     const log5bill: IcRaw[] = await storkService.checkedMoreThanFiveBillion();
 
     if (log5bill.length > 0) {
-      console.log('log5bill : ', log5bill.length);
+      console.log(`log5bill : ${log5bill.length}`);
       await log5billRepository.save(log5bill);
     }
 

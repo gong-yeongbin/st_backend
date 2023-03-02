@@ -22,8 +22,12 @@ export const endBeforeDate = (): string => {
 };
 
 export const startBeforeMinute = (): string => {
-  return moment().tz('Asia/Seoul').subtract(1, 'minute').startOf('minute').format('YYYY-MM-DD HH:mm:ss');
+  return moment('2023-03-02 09:01:00')
+    .tz('Asia/Seoul')
+    .subtract(1, 'minute')
+    .startOf('minute')
+    .format('YYYY-MM-DD HH:mm:ss');
 };
 export const endBeforeMinute = (): string => {
-  return moment().tz('Asia/Seoul').startOf('minute').format('YYYY-MM-DD HH:mm:ss');
+  return moment('2023-03-02 09:01:00').tz('Asia/Seoul').startOf('minute').format('YYYY-MM-DD HH:mm:ss');
 };
