@@ -3,7 +3,7 @@ import { IcRaw } from '../interfaces/cRaw';
 
 const cRawSchema = new mongoose.Schema(
   {
-    c_time: { type: Date }, //  체결시간
+    c_time: { type: String }, //  체결시간
     code: { type: String }, //  코드
     c_price: { type: Number }, //  체결가
     c_prev_com: { type: Number }, //  전일대비

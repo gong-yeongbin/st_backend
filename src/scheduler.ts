@@ -7,7 +7,6 @@ import { log_15per } from './entities/log_15per';
 import { log_prev10bill } from './entities/log_prev10bill';
 import { log_prev100bill } from './entities/log_prev100bill';
 import { Repository } from 'typeorm';
-import crawling from './crawling';
 
 export default (function main() {
   const logPrev100billRepository: Repository<log_prev100bill> = appDataSource.getRepository(log_prev100bill);
@@ -15,11 +14,7 @@ export default (function main() {
   const log5billRepository: Repository<log_5bill> = appDataSource.getRepository(log_5bill);
   const log15perRepository: Repository<log_15per> = appDataSource.getRepository(log_15per);
 
-  schedule.scheduleJob('0 5 17 * * 1-7 ', async () => {
-    crawling();
-  });
-
-  schedule.scheduleJob('0 0 1 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 30 8 * * 1-7 ', async () => {
     // 전일 거래대금 1000억 이상
     const prev100bill: IcRaw[] = await storkService.transactionAmountOfThePreviousDayMoreThan100BillionWon();
 

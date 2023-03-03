@@ -1,43 +1,44 @@
-import axios from 'axios';
+import schedule from 'node-schedule';
 import cheerio from 'cheerio';
+import puppeteer, { Browser, Page } from 'puppeteer';
 import { ImRaw } from './interfaces/mRaw';
+import mRaw from './models/mRaw';
 import storkService from './services/stork';
+import { startDate } from './util/date';
 
-const crawling = async () => {
-  try {
+(function () {
+  schedule.scheduleJob('0 0 8 * * 1-7 ', async () => {
     const mRawList: ImRaw[] = await storkService.getMrawList();
-    const urls: string[] = mRawList.map((mRaw) => {
-      return `https://finance.naver.com/item/main.naver?code=${mRaw.idx}`;
+
+    const browser: Browser = await puppeteer.launch({
+      headless: true,
+      ignoreHTTPSErrors: true,
     });
 
-    await axios.all(urls.map((url) => axios.get(url))).then(
-      axios.spread(function (...urls) {
-        urls.map((url) => {
-          const $ = cheerio.load(url.data);
-          const data = $(
-            '#content > div.section.cop_analysis > div.sub_section > table > tbody > tr:nth-child(3) > td.last.cell_strong'
-          ).text();
-          console.log(data);
-        });
-      })
-    );
-    // mRawList.map((mRaw) => {
-    //   setInterval(async () => {
-    //     const html = await axios.get(`https://finance.naver.com/item/main.naver?code=${mRaw.idx}`);
-    //     const $ = cheerio.load(html.data);
+    for (let i = 0; i < mRawList.length; i++) {
+      const page: Page = await browser.newPage();
+      await page.goto(`https://finance.naver.com/item/main.naver?code=${mRawList[i].idx}`, {
+        waitUntil: 'networkidle2',
+      });
+      const content: string = await page.content();
 
-    //     const data = $(
-    //       '#content > div.section.cop_analysis > div.sub_section > table > tbody > tr:nth-child(3) > td.last.cell_strong'
-    //     ).text();
-    //     console.log(data);
-    //   }, 5000);
-    // });
+      const $ = cheerio.load(content);
 
-    // mRawList.map(async (mRaw) => {
-    // });
-  } catch (error) {
-    console.log(error);
-  }
-};
+      const opr: string =
+        $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(11)').text().trim() === ''
+          ? $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(10)').text().trim()
+          : $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(11)').text().trim();
+      const rr: string =
+        $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(11)').text().trim() === ''
+          ? $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(10)').text().trim()
+          : $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(11)').text().trim();
 
-export default crawling;
+      await mRaw.updateOne(
+        { createdAt: startDate(), idx: mRawList[i].idx },
+        { $set: { rr: parseFloat(rr), opr: parseFloat(opr) } }
+      );
+      await page.close();
+    }
+    await browser.close();
+  });
+})();

@@ -6,6 +6,7 @@ import './loaders/mongodb';
 import './loaders/mysql';
 import './loaders/redis';
 import './scheduler';
+import './crawling';
 import config from './config';
 import index from './routes/index';
 
