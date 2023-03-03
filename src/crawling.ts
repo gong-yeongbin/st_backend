@@ -13,6 +13,7 @@ import { startDate } from './util/date';
     const browser: Browser = await puppeteer.launch({
       headless: true,
       ignoreHTTPSErrors: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
 
     for (let i = 0; i < mRawList.length; i++) {
