@@ -9,6 +9,7 @@ import { startDate } from './util/date';
 (function () {
   schedule.scheduleJob('0 5 0 * * * ', async () => {
     // schedule.scheduleJob('0 5 0 * * 1-7 ', async () => {
+    console.log('crawling');
     const mRawList: ImRaw[] = await storkService.getMrawList();
 
     const browser: Browser = await puppeteer.launch({
