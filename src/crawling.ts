@@ -7,13 +7,14 @@ import storkService from './services/stork';
 import { startDate } from './util/date';
 
 (function () {
-  schedule.scheduleJob('0 0 8 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 28 17 * * 1-7 ', async () => {
     const mRawList: ImRaw[] = await storkService.getMrawList();
 
     const browser: Browser = await puppeteer.launch({
       headless: true,
       ignoreHTTPSErrors: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath: '/path/to/Chrome',
     });
 
     for (let i = 0; i < mRawList.length; i++) {
