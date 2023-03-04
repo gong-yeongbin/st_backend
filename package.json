@@ -1,9 +1,6 @@
 {
   "name": "st_backend",
   "version": "1.0.0",
-  "optionalDependencies": {
-    "fsevents": "*"
-  },
   "description": "express server",
   "main": "index.js",
   "scripts": {
