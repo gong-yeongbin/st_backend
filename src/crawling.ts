@@ -7,7 +7,7 @@ import storkService from './services/stork';
 import { startDate } from './util/date';
 
 (function () {
-  schedule.scheduleJob('0 20 14 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 40 14 * * 1-7 ', async () => {
     const mRawList: ImRaw[] = await storkService.getMrawList();
 
     const browser: Browser = await puppeteer.launch({
@@ -26,13 +26,13 @@ import { startDate } from './util/date';
       const $ = cheerio.load(content);
 
       const opr: string =
-        $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(11)').text().trim() === ''
-          ? $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(10)').text().trim()
-          : $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(11)').text().trim();
+        $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(11)').text().trim().replace(',', '') === ''
+          ? $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(10)').text().trim().replace(',', '')
+          : $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(11)').text().trim().replace(',', '');
       const rr: string =
-        $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(11)').text().trim() === ''
-          ? $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(10)').text().trim()
-          : $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(11)').text().trim();
+        $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(11)').text().trim().replace(',', '') === ''
+          ? $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(10)').text().trim().replace(',', '')
+          : $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(11)').text().trim().replace(',', '');
 
       await mRaw.updateOne(
         { createdAt: startDate(), idx: mRawList[i].idx },
