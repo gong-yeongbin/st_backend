@@ -14,7 +14,6 @@ import { startDate } from './util/date';
       headless: true,
       ignoreHTTPSErrors: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
-      executablePath: '/path/to/Chrome',
     });
 
     for (let i = 0; i < mRawList.length; i++) {
