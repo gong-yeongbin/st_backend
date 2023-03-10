@@ -6,6 +6,7 @@ export abstract class common {
 
   @CreateDateColumn({
     name: 'createdAt',
+    type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
   })
   createdAt: Date;
