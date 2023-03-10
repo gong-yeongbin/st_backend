@@ -1,3 +1,4 @@
+import moment from 'moment-timezone';
 import { endBeforeDate, endBeforeMinute, startBeforeDate, startBeforeMinute, startDate } from '../util/date';
 import mRaw from '../models/mRaw';
 import cRaw from '../models/cRaw';
@@ -339,8 +340,92 @@ const storkService = {
     );
   },
 
+  getRsi: async () => {
+    console.log('rsi ...');
+    const dateList: { date: string }[] = await storkService.getRsiDateList();
+    const mRawList: ImRaw[] = await storkService.getMrawList();
+
+    for (let i = 0; i < mRawList.length; i++) {
+      let au: number = 0;
+      let ad: number = 0;
+
+      for (let j = 0; j < dateList.length; j++) {
+        const startDate: string = dateList[j].date;
+        const endDate: string = moment(dateList[j].date).tz('Asia/Seoul').add(1, 'day').format('YYYY-MM-DD');
+
+        const cRawData: IcRaw[] = await cRaw.aggregate(
+          [
+            {
+              $match: {
+                $and: [
+                  {
+                    c_time: {
+                      $gte: startDate,
+                      $lt: endDate,
+                    },
+                  },
+                  { code: mRawList[i].idx },
+                ],
+              },
+            },
+            {
+              $sort: { c_time: -1 },
+            },
+            {
+              $group: {
+                _id: '$code',
+                c_prev_com: { $first: '$c_prev_com' },
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                c_prev_com: 1,
+              },
+            },
+          ],
+          {
+            allowDiskUse: true,
+          }
+        );
+
+        if (cRawData.length === 0) break;
+
+        cRawData[0].c_prev_com > 0 ? (au += cRawData[0].c_prev_com) : (ad += Math.abs(cRawData[0].c_prev_com));
+      }
+
+      au = au / 14;
+      ad = ad / 14;
+
+      if (au || ad !== 0) {
+        const rsi = ((au / (au + ad)) * 100).toFixed(2);
+        await mRaw.updateOne({ createdAt: startDate(), idx: mRawList[i].idx }, { $set: { rsi: rsi } });
+      }
+    }
+  },
+
   getMrawList: async (): Promise<ImRaw[]> => {
     return await mRaw.aggregate([{ $match: { createdAt: { $eq: startDate() } } }]);
+  },
+
+  getRsiDateList: async (): Promise<{ date: string }[]> => {
+    return await cRaw.aggregate([
+      {
+        $match: { c_time: { $lt: startDate() } },
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: '%Y-%m-%d', date: { $dateFromString: { dateString: '$c_time' } } } },
+        },
+      },
+      { $project: { _id: 0, date: '$_id' } },
+      {
+        $sort: {
+          date: 1,
+        },
+      },
+      { $limit: 14 },
+    ]);
   },
 };
 

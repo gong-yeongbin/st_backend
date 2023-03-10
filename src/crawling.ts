@@ -7,7 +7,7 @@ import storkService from './services/stork';
 import { startDate } from './util/date';
 
 (function () {
-  schedule.scheduleJob('0 20 8 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 15 8 * * 1-7 ', async () => {
     console.log('crawling...');
     const mRawList: ImRaw[] = await storkService.getMrawList();
 
@@ -18,28 +18,34 @@ import { startDate } from './util/date';
     });
 
     for (let i = 0; i < mRawList.length; i++) {
-      const page: Page = await browser.newPage();
-      await page.goto(`https://finance.naver.com/item/main.naver?code=${mRawList[i].idx}`, {
-        waitUntil: 'networkidle2',
-      });
-      const content: string = await page.content();
+      try {
+        const page: Page = await browser.newPage();
+        await page.goto(`https://finance.naver.com/item/main.naver?code=${mRawList[i].idx}`, {
+          waitUntil: 'networkidle2',
+        });
+        const content: string = await page.content();
 
-      const $ = cheerio.load(content);
+        const $ = cheerio.load(content);
 
-      const opr: string =
-        $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(11)').text().trim().replace(',', '') === ''
-          ? $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(10)').text().trim().replace(',', '')
-          : $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(11)').text().trim().replace(',', '');
-      const rr: string =
-        $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(11)').text().trim().replace(',', '') === ''
-          ? $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(10)').text().trim().replace(',', '')
-          : $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(11)').text().trim().replace(',', '');
+        const opr: string =
+          $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(11)').text().trim().replace(',', '') ===
+          ''
+            ? $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(10)').text().trim().replace(',', '')
+            : $('div.sub_section > table > tbody > tr:nth-child(4) > td:nth-child(11)').text().trim().replace(',', '');
+        const rr: string =
+          $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(11)').text().trim().replace(',', '') ===
+          ''
+            ? $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(10)').text().trim().replace(',', '')
+            : $('div.sub_section > table > tbody > tr:nth-child(9) > td:nth-child(11)').text().trim().replace(',', '');
 
-      await mRaw.updateOne(
-        { createdAt: startDate(), idx: mRawList[i].idx },
-        { $set: { rr: parseFloat(rr), opr: parseFloat(opr) } }
-      );
-      await page.close();
+        await mRaw.updateOne(
+          { createdAt: startDate(), idx: mRawList[i].idx },
+          { $set: { rr: parseFloat(rr), opr: parseFloat(opr) } }
+        );
+        await page.close();
+      } catch (error) {
+        console.log(error);
+      }
     }
     await browser.close();
   });

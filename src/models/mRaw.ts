@@ -9,6 +9,7 @@ const mRawSchema = new mongoose.Schema(
     opr: { type: Number }, // 영업이익률
     rr: { type: Number }, // 유보율
     gb: { type: Number }, // 장구분 0: kospi, 10: kosdaq
+    rsi: { type: Number, default: 0 },
     createdAt: { type: String }, // 생성날짜
   },
   {

@@ -5,5 +5,6 @@ export interface ImRaw {
   opr: number;
   rr: number;
   gb: number;
+  rsi: number;
   createdAt: Date;
 }
