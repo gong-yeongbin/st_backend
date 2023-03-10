@@ -3,8 +3,8 @@ import { common } from './common';
 
 @Entity({ database: 'gongyb', name: 'log_prev100bill' })
 export class log_prev100bill extends common {
-  @Column({ type: 'varchar' })
-  c_time: string;
+  @Column({ type: 'datetime' })
+  c_time: Date;
 
   @Column({ name: 'code', type: 'varchar' })
   code: string;

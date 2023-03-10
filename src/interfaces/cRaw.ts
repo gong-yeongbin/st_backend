@@ -1,5 +1,5 @@
 export interface IcRaw {
-  c_time: string;
+  c_time: Date;
   code: string;
   c_price: number;
   c_prev_com: number;

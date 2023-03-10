@@ -55,6 +55,3 @@ export default (function main() {
     }
   });
 })();
-function getRsiDateList(): any {
-  throw new Error('Function not implemented.');
-}
