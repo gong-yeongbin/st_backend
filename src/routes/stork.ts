@@ -8,19 +8,14 @@ router.get(
   storkController.transactionAmountOfThePreviousDayMoreThan100BillionWon
 );
 
-router.get(
-  '/moreThan15percentComparedToThePreviousDay',
-  storkController.moreThan15percentComparedToThePreviousDay
-);
+router.get('/moreThan15percentComparedToThePreviousDay', storkController.moreThan15percentComparedToThePreviousDay);
 
 router.get(
   '/aNetPurchaseOfThePreviousDayMoreThan10BillionWon',
   storkController.aNetPurchaseOfThePreviousDayMoreThan10BillionWon
 );
 
-router.get(
-  '/checkedMoreThanFiveBillion',
-  storkController.checkedMoreThanFiveBillion
-);
+router.get('/checkedMoreThanFiveBillion', storkController.checkedMoreThanFiveBillion);
 
+router.get('/rsi', storkController.getRsi);
 export default router;

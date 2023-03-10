@@ -5,6 +5,7 @@ import { log_prev10bill } from '../entities/log_prev10bill';
 import { log_prev100bill } from '../entities/log_prev100bill';
 import { log_5bill } from '../entities/log_5bill';
 import { log_15per } from '../entities/log_15per';
+import { ImRaw } from '../interfaces/mRaw';
 
 const storkController = {
   transactionAmountOfThePreviousDayMoreThan100BillionWon: async (req: Request, res: Response) => {
@@ -44,6 +45,16 @@ const storkController = {
       const checkedMoreThanFiveBillionData: log_5bill[] = await oneMinute.checkedMoreThanFiveBillion();
 
       return res.json(checkedMoreThanFiveBillionData);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  getRsi: async (req: Request, res: Response) => {
+    try {
+      const mRawList: ImRaw[] = await previousDay.getRsi();
+
+      return res.json(mRawList);
     } catch (error) {
       console.log(error);
     }

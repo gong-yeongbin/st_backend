@@ -4,6 +4,9 @@ import { Between, Repository } from 'typeorm';
 import { log_prev100bill } from '../entities/log_prev100bill';
 import { log_prev10bill } from '../entities/log_prev10bill';
 import { endDate, startDate } from '../util/date';
+import { ImRaw } from '../interfaces/mRaw';
+import mRaw from '../models/mRaw';
+import { decrypt } from '../util/crypt';
 
 const logPrev100billRepository: Repository<log_prev100bill> = appDataSource.getRepository(log_prev100bill);
 const logPrev10billRepository: Repository<log_prev10bill> = appDataSource.getRepository(log_prev10bill);
@@ -20,6 +23,19 @@ const previousDay = {
     return await logPrev10billRepository.find({
       where: { createdAt: Between(new Date(startDate()), new Date(endDate())) },
     });
+  },
+
+  getRsi: async (): Promise<ImRaw[]> => {
+    const mRawList: ImRaw[] = await mRaw.aggregate([
+      {
+        $match: { createdAt: { $eq: startDate() } },
+      },
+    ]);
+    mRawList.map((mRaw) => {
+      mRaw.nm = decrypt(mRaw.nm);
+    });
+
+    return mRawList;
   },
 };
 
