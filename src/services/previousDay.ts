@@ -14,6 +14,7 @@ const logPrev10billRepository: Repository<log_prev10bill> = appDataSource.getRep
 const previousDay = {
   // 전일 거래대금 1000억 이상
   transactionAmountOfThePreviousDayMoreThan100BillionWon: async (): Promise<log_prev100bill[]> => {
+    console.log(await logPrev100billRepository.find());
     return await logPrev100billRepository.find({
       where: { createdAt: Between(new Date(startDate()), new Date(endDate())) },
     });
