@@ -7,7 +7,7 @@ import storkService from './services/stork';
 import { startDate } from './util/date';
 
 (function () {
-  schedule.scheduleJob('0 15 8 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 10 8 * * 1-7 ', async () => {
     console.log('crawling...');
     const mRawList: ImRaw[] = await storkService.getMrawList();
 
@@ -48,5 +48,6 @@ import { startDate } from './util/date';
       }
     }
     await browser.close();
+    await storkService.getRsi();
   });
 })();
