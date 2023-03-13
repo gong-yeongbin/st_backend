@@ -341,7 +341,7 @@ const storkService = {
   },
 
   getRsi: async () => {
-    console.log('rsi ...');
+    console.log(`rsi start... ${moment().format('YYYY-MM-DD HH:mm:ss')}`);
     const dateList: { date: string }[] = await storkService.getRsiDateList();
     const mRawList: ImRaw[] = await storkService.getMrawList();
 
@@ -402,6 +402,7 @@ const storkService = {
         await mRaw.updateOne({ createdAt: startDate(), idx: mRawList[i].idx }, { $set: { rsi: rsi } });
       }
     }
+    console.log(`rsi end ... ${moment().format('YYYY-MM-DD HH:mm:ss')}`);
   },
 
   getMrawList: async (): Promise<ImRaw[]> => {
