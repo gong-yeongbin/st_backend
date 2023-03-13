@@ -8,8 +8,8 @@ import storkService from './services/stork';
 import { startDate } from './util/date';
 
 (function () {
-  // schedule.scheduleJob('0 10 6 * * 1-7 ', async () => {
-  schedule.scheduleJob('0 5 16 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 45 17 * * 1-7 ', async () => {
+    // schedule.scheduleJob('0 10 7 * * 1-7 ', async () => {
     await storkService.getRsi();
 
     console.log(`crawling start... ${moment().format('YYYY-MM-DD HH:mm:ss')}`);
@@ -31,10 +31,10 @@ import { startDate } from './util/date';
     });
 
     for (let i = 0; i < mRawList.length; i++) {
+      const page: Page = await browser.newPage();
       try {
-        const page: Page = await browser.newPage();
         await page.goto(`https://finance.naver.com/item/main.naver?code=${mRawList[i].idx}`, {
-          waitUntil: 'networkidle2',
+          waitUntil: 'load',
         });
         const content: string = await page.content();
 
@@ -59,6 +59,8 @@ import { startDate } from './util/date';
         await page.close();
       } catch (error) {
         console.log(error);
+        console.log('error code : ', mRawList[i].idx);
+        await page.close();
       }
     }
     console.log(`crawling end... ${moment().format('YYYY-MM-DD HH:mm:ss')}`);
