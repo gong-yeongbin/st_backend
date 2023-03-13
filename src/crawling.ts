@@ -8,7 +8,7 @@ import { startDate } from './util/date';
 import axios from 'axios';
 
 (function () {
-  schedule.scheduleJob('0 15 22 * * 1-7 ', async () => {
+  schedule.scheduleJob('0 10 7 * * 1-7 ', async () => {
     console.log(`crawling start... ${moment().format('YYYY-MM-DD HH:mm:ss')}`);
     const mRawList: ImRaw[] = await storkService.getMrawList();
 
@@ -36,8 +36,6 @@ import axios from 'axios';
           { createdAt: startDate(), idx: mRawList[i].idx },
           { $set: { rr: parseFloat(rr), opr: parseFloat(opr) } }
         );
-
-        console.log('crawling ...ing ', mRawList[i].idx);
       } catch (error) {
         console.log(error);
         console.log('error code : ', mRawList[i].idx);
