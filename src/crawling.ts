@@ -9,6 +9,8 @@ import axios from 'axios';
 
 (function () {
   schedule.scheduleJob('0 10 7 * * 1-7 ', async () => {
+    await storkService.getRsi();
+
     console.log(`crawling start... ${moment().format('YYYY-MM-DD HH:mm:ss')}`);
     const mRawList: ImRaw[] = await storkService.getMrawList();
 

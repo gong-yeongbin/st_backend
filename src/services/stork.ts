@@ -203,6 +203,9 @@ const storkService = {
           },
         },
         {
+          $sort: { c_time: -1 },
+        },
+        {
           $group: {
             _id: '$code',
             c_time: { $first: '$c_time' },
