@@ -30,6 +30,6 @@ const cRawSchema = new mongoose.Schema(
   }
 );
 
-cRawSchema.index({ code: 1, c_time: 1 });
+cRawSchema.index({ code: 1 });
 
 export default mongoose.model<IcRaw & mongoose.Document>('c_raw', cRawSchema);
