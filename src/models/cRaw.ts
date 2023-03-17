@@ -23,13 +23,13 @@ const cRawSchema = new mongoose.Schema(
     // c_trans_rot: { type: Number }, //  거래회전율
     // c_trans_price: { type: Number }, //  거래비용
     c_power: { type: Number }, //  체결강도
-    // c_market_price: { type: Number }, //  시가총액
+    c_market_price: { type: Number }, //  시가총액
   },
   {
     collection: 'c_raw',
   }
 );
 
-cRawSchema.index({ code: 1 });
+cRawSchema.index({ code: 1, c_time: 1 });
 
 export default mongoose.model<IcRaw & mongoose.Document>('c_raw', cRawSchema);
