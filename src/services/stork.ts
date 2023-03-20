@@ -18,8 +18,8 @@ const storkService = {
             $and: [
               {
                 c_time: {
-                  $gte: startBeforeDate(),
-                  $lt: endBeforeDate(),
+                  $gte: new Date(startBeforeDate()),
+                  $lt: new Date(endBeforeDate()),
                 },
               },
               { code: { $nin: excludeCodes } },
@@ -105,8 +105,8 @@ const storkService = {
             $and: [
               {
                 c_time: {
-                  $gte: startBeforeMinute(),
-                  $lt: endBeforeMinute(),
+                  $gte: new Date(startBeforeMinute()),
+                  $lt: new Date(endBeforeMinute()),
                 },
               },
               { code: { $nin: excludeCodes } },
@@ -194,8 +194,8 @@ const storkService = {
             $and: [
               {
                 c_time: {
-                  $gte: startBeforeDate(),
-                  $lt: endBeforeDate(),
+                  $gte: new Date(startBeforeDate()),
+                  $lt: new Date(endBeforeDate()),
                 },
               },
               { code: { $nin: excludeCodes } },
@@ -277,8 +277,8 @@ const storkService = {
         {
           $match: {
             c_time: {
-              $gte: startBeforeMinute(),
-              $lt: endBeforeMinute(),
+              $gte: new Date(startBeforeMinute()),
+              $lt: new Date(endBeforeMinute()),
             },
           },
         },
@@ -353,8 +353,12 @@ const storkService = {
       let ad: number = 0;
 
       for (let j = 0; j < dateList.length; j++) {
-        const startDate: string = dateList[j].date;
-        const endDate: string = moment(dateList[j].date).tz('Asia/Seoul').add(1, 'day').format('YYYY-MM-DD');
+        const startDate: string = moment(dateList[j].date).tz('Asia/Seoul').add(9, 'h').format('YYYY-MM-DD');
+        const endDate: string = moment(dateList[j].date)
+          .tz('Asia/Seoul')
+          .add(1, 'day')
+          .add(9, 'h')
+          .format('YYYY-MM-DD');
 
         const cRawData: IcRaw[] = await cRaw.aggregate(
           [
@@ -363,8 +367,8 @@ const storkService = {
                 $and: [
                   {
                     c_time: {
-                      $gte: startDate,
-                      $lt: endDate,
+                      $gte: new Date(startDate),
+                      $lt: new Date(endDate),
                     },
                   },
                   { code: mRawList[i].idx },
@@ -419,7 +423,7 @@ const storkService = {
       },
       {
         $group: {
-          _id: { $dateToString: { format: '%Y-%m-%d', date: { $dateFromString: { dateString: '$c_time' } } } },
+          _id: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$c_time' } } },
         },
       },
       { $project: { _id: 0, date: '$_id' } },
