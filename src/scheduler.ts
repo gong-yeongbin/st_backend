@@ -15,6 +15,10 @@ export default (function main() {
   const log5billRepository: Repository<log_5bill> = appDataSource.getRepository(log_5bill);
   const log15perRepository: Repository<log_15per> = appDataSource.getRepository(log_15per);
 
+  schedule.scheduleJob('0 30 9 * * 1-7 ', async () => {
+    await storkService.getRsi();
+  });
+
   schedule.scheduleJob('0 50 8 * * 1-7 ', async () => {
     // 전일 거래대금 1000억 이상
     const prev100bill: IcRaw[] = await storkService.transactionAmountOfThePreviousDayMoreThan100BillionWon();

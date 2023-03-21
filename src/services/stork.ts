@@ -419,7 +419,7 @@ const storkService = {
   getRsiDateList: async (): Promise<{ date: string }[]> => {
     return await cRaw.aggregate([
       {
-        $match: { c_time: { $lt: startDate() } },
+        $match: { c_time: { $lt: new Date(endBeforeDate()) } },
       },
       {
         $group: {

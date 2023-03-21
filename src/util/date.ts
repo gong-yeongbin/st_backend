@@ -18,7 +18,7 @@ export const startBeforeDate = (): string => {
     : moment().tz('Asia/Seoul').add(9, 'h').subtract(1, 'day').format('YYYY-MM-DD');
 };
 export const endBeforeDate = (): string => {
-  return moment().tz('Asia/Seoul').format('YYYY-MM-DD');
+  return moment().tz('Asia/Seoul').add(9, 'h').format('YYYY-MM-DD');
 };
 
 export const startBeforeMinute = (): string => {
