@@ -423,7 +423,7 @@ const storkService = {
       },
       {
         $group: {
-          _id: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$c_time' } } },
+          _id: { $dateToString: { format: '%Y-%m-%d', date: '$c_time' } },
         },
       },
       { $project: { _id: 0, date: '$_id' } },

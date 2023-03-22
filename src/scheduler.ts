@@ -8,6 +8,7 @@ import { log_prev10bill } from './entities/log_prev10bill';
 import { log_prev100bill } from './entities/log_prev100bill';
 import { Repository } from 'typeorm';
 import cRaw from './models/cRaw';
+import { ImRaw } from './interfaces/mRaw';
 
 export default (function main() {
   const logPrev100billRepository: Repository<log_prev100bill> = appDataSource.getRepository(log_prev100bill);
@@ -52,6 +53,3 @@ export default (function main() {
     }
   });
 })();
-function getRsi() {
-  throw new Error('Function not implemented.');
-}
