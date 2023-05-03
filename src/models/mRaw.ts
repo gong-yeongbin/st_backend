@@ -9,14 +9,16 @@ const mRawSchema = new mongoose.Schema(
     opr: { type: Number }, // 영업이익률
     rr: { type: Number }, // 유보율
     gb: { type: Number }, // 장구분 0: kospi, 10: kosdaq
-    rsi: { type: Number, default: 0 },
+    rsi: { type: Number },
     createdAt: { type: String }, // 생성날짜
   },
   {
+    _id: false,
+    versionKey: false,
     collection: 'm_raw',
   }
 );
 
-mRawSchema.index({ createdAt: 1 });
+mRawSchema.index({ createdAt: -1 });
 
 export default mongoose.model<ImRaw & mongoose.Document>('m_raw', mRawSchema);

@@ -1,9 +1,9 @@
 import moment from 'moment-timezone';
-import { endBeforeDate, endBeforeMinute, startBeforeDate, startBeforeMinute, startDate } from '../util/date';
-import mRaw from '../models/mRaw';
-import cRaw from '../models/cRaw';
-import { ImRaw } from '../interfaces/mRaw';
-import { IcRaw } from '../interfaces/cRaw';
+import { endBeforeDate, endBeforeMinute, startBeforeDate, startBeforeMinute, startDate } from './util/date';
+import mRaw from './models/mRaw';
+import cRaw from './models/cRaw';
+import { ImRaw } from './interfaces/mRaw';
+import { IcRaw } from './interfaces/cRaw';
 
 const storkService = {
   // 전일 거래대금 1000억 이상

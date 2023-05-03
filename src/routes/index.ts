@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import storkRouter from './stork';
+import rsiRouter from './rsi';
 
 const router: Router = Router();
 
-router.use('/st', storkRouter);
+router.use('/rsi', rsiRouter);
 
 export default router;

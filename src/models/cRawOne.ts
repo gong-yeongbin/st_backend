@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { IcRaw } from '../interfaces/cRaw';
 
-const cRawSchema = new mongoose.Schema(
+const cRawOneSchema = new mongoose.Schema(
   {
     c_time: { type: String }, //  체결시간
     code: { type: String }, //  코드
@@ -28,10 +28,10 @@ const cRawSchema = new mongoose.Schema(
   {
     _id: false,
     versionKey: false,
-    collection: 'c_raw',
+    collection: 'c_raw_one',
   }
 );
 
-cRawSchema.index({ c_time: -1 });
+cRawOneSchema.index({ c_time: -1 });
 
-export default mongoose.model<IcRaw & mongoose.Document>('c_raw', cRawSchema);
+export default mongoose.model<IcRaw & mongoose.Document>('c_raw_one', cRawOneSchema);

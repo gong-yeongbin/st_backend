@@ -6,7 +6,6 @@ export const startDate = (): string => {
 export const endDate = (): string => {
   return moment().tz('Asia/Seoul').add(1, 'day').format('YYYY-MM-DD');
 };
-
 export const startBeforeDate = (): string => {
   const week: number = moment().tz('Asia/Seoul').day();
   return week == 6
@@ -20,7 +19,6 @@ export const startBeforeDate = (): string => {
 export const endBeforeDate = (): string => {
   return moment().tz('Asia/Seoul').add(9, 'h').format('YYYY-MM-DD');
 };
-
 export const startBeforeMinute = (): string => {
   return moment().tz('Asia/Seoul').add(9, 'h').subtract(1, 'minute').startOf('minute').format('YYYY-MM-DD HH:mm:ss');
 };

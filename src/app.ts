@@ -1,19 +1,18 @@
 import 'reflect-metadata';
+
 import express, { Express } from 'express';
 import cors from 'cors';
+import config from './config';
+import indexRouter from './routes/index';
+
 import 'dotenv/config';
 import './loaders/mongodb';
-import './loaders/mysql';
-import './loaders/redis';
-import './scheduler';
-import './crawling';
-import config from './config';
-import index from './routes/index';
+import './schedules';
 
 const app: Express = express();
-app.use(cors());
-app.use('/', index);
+app.use('/', indexRouter);
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
